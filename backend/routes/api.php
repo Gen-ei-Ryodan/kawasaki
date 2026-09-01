@@ -73,10 +73,12 @@ Route::prefix('v1')->group(function () {
         Route::put('/sales/{sale}/complete', [SalesTransactionController::class, 'complete']);
         Route::put('/sales/{sale}/cancel', [SalesTransactionController::class, 'cancel']);
 
-        // Service
+// Service
         Route::apiResource('services', ServiceController::class);
-        Route::apiResource('service-bookings', \App\Http\Controllers\ServiceBookingController::class);
+        Route::apiResource('service-bookings', ServiceBookingController::class);
         Route::get('/vehicles/{vehicle}/service-records', [ServiceController::class, 'recordsByVehicle']);
+        Route::get('/service-schedules', [\App\Http\Controllers\ServiceScheduleController::class, 'index']);
+        Route::get('/service-reminders', [\App\Http\Controllers\ServiceScheduleController::class, 'reminders']);
 
         // Warranty
         Route::apiResource('warranties', \App\Http\Controllers\WarrantyController::class);
