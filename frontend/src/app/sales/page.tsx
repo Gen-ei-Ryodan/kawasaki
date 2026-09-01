@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import SalesForm from '@/components/forms/SalesForm';
 import { SalesTransaction, Customer, Vehicle, Salesperson, Dealer } from '@/types';
 
 export default function SalesPage() {
@@ -14,6 +16,8 @@ export default function SalesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
@@ -41,10 +45,29 @@ export default function SalesPage() {
 
   useEffect(() => { loadData(); }, [search, statusFilter]);
 
+  const handleSave = async (data: Partial<SalesTransaction>) => {
+    setSaving(true);
+    try {
+      // Compute final price on the client
+      const final = (data.vehicle_price ?? 0) - (data.discount ?? 0) + (data.additional_cost ?? 0);
+      const payload: Partial<SalesTransaction> = { ...data, final_price: final };
+      await api.post('/sales', payload);
+      setPanelOpen(false);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save sale:', err);
+      alert(err.response?.data?.message || 'Failed to save sale');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleComplete = async (id: number) => {
     if (!confirm('Complete this sale?')) return;
     try { await api.put(`/sales/${id}/complete`, {}); loadData(); } catch (err: any) { alert(err.response?.data?.message); }
   };
+
+  const closePanel = () => { setPanelOpen(false); };
 
   const statusColors: Record<string, string> = {
     DRAFT: 'bg-gray-100 text-gray-800', BOOKED: 'bg-blue-100 text-blue-800',
@@ -59,7 +82,7 @@ export default function SalesPage() {
           <p className="text-gray-600 text-sm">Manage sales transactions</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/sales/create'; }}
+          onClick={() => { setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + New Sale
@@ -132,6 +155,23 @@ export default function SalesPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title="Create Sales Transaction"
+        widthClass="max-w-2xl"
+      >
+        <SalesForm
+          sale={null}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          customers={customers}
+          vehicles={vehicles}
+          salespersons={salespersons}
+          dealers={dealers}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

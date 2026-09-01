@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import WarrantyForm from '@/components/forms/WarrantyForm';
 import { Warranty, Vehicle, Customer } from '@/types';
 
 export default function WarrantiesPage() {
@@ -12,6 +14,9 @@ export default function WarrantiesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingWarranty, setEditingWarranty] = useState<Warranty | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
@@ -35,6 +40,27 @@ export default function WarrantiesPage() {
 
   useEffect(() => { loadData(); }, [search, statusFilter]);
 
+  const handleSave = async (data: Partial<Warranty>) => {
+    setSaving(true);
+    try {
+      if (editingWarranty) {
+        await api.put(`/warranties/${editingWarranty.id}`, data);
+      } else {
+        await api.post('/warranties', data);
+      }
+      setPanelOpen(false);
+      setEditingWarranty(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save warranty:', err);
+      alert(err.response?.data?.message || 'Failed to save warranty');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const closePanel = () => { setPanelOpen(false); setEditingWarranty(null); };
+
   const statusColors: Record<string, string> = {
     ACTIVE: 'bg-green-100 text-green-800', EXPIRED: 'bg-gray-100 text-gray-800', VOID: 'bg-red-100 text-red-800',
   };
@@ -47,7 +73,7 @@ export default function WarrantiesPage() {
           <p className="text-gray-600 text-sm">Manage vehicle warranties and claims</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/warranties/create'; }}
+          onClick={() => { setEditingWarranty(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + New Warranty
@@ -103,7 +129,7 @@ export default function WarrantiesPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/warranties/" + w.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = "/warranties/" + w.id + "/edit"; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingWarranty(w); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                   </td>
                 </tr>
               ))}
@@ -111,6 +137,21 @@ export default function WarrantiesPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingWarranty ? 'Edit Warranty' : 'Create Warranty'}
+        widthClass="max-w-2xl"
+      >
+        <WarrantyForm
+          warranty={editingWarranty}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          vehicles={vehicles}
+          customers={customers}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

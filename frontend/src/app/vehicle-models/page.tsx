@@ -3,12 +3,17 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import VehicleModelForm from '@/components/forms/VehicleModelForm';
 import { VehicleModel } from '@/types';
 
 export default function VehicleModelsPage() {
   const [models, setModels] = useState<VehicleModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingModel, setEditingModel] = useState<VehicleModel | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadModels = async () => {
     try {
@@ -25,10 +30,31 @@ export default function VehicleModelsPage() {
 
   useEffect(() => { loadModels(); }, [search]);
 
+  const handleSave = async (data: Partial<VehicleModel>) => {
+    setSaving(true);
+    try {
+      if (editingModel) {
+        await api.put(`/vehicle-models/${editingModel.id}`, data);
+      } else {
+        await api.post('/vehicle-models', data);
+      }
+      setPanelOpen(false);
+      setEditingModel(null);
+      loadModels();
+    } catch (err: any) {
+      console.error('Failed to save model:', err);
+      alert(err.response?.data?.message || 'Failed to save model');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this vehicle model?')) return;
     try { await api.delete(`/vehicle-models/${id}`); loadModels(); } catch (err) { console.error(err); }
   };
+
+  const closePanel = () => { setPanelOpen(false); setEditingModel(null); };
 
   return (
     <Layout>
@@ -38,7 +64,7 @@ export default function VehicleModelsPage() {
           <p className="text-gray-600 text-sm">Manage Kawasaki motorcycle models</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/vehicle-models/create'; }}
+          onClick={() => { setEditingModel(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Model
@@ -83,7 +109,7 @@ export default function VehicleModelsPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = "/vehicle-models/" + m.id + "/edit"; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingModel(m); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     <button onClick={() => handleDelete(m.id)} className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
@@ -92,6 +118,19 @@ export default function VehicleModelsPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingModel ? 'Edit Vehicle Model' : 'Create Vehicle Model'}
+        widthClass="max-w-2xl"
+      >
+        <VehicleModelForm
+          model={editingModel}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

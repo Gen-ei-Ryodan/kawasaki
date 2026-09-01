@@ -3,21 +3,37 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { Vehicle, Customer, Dealer } from '@/types';
+import SlidePanel from '@/components/SlidePanel';
+import ServiceBookingForm from '@/components/forms/ServiceBookingForm';
+import { ServiceBooking, Vehicle, Customer, Dealer } from '@/types';
 
 export default function ServiceBookingsPage() {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<ServiceBooking[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingBooking, setEditingBooking] = useState<ServiceBooking | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
       if (search) params.search = search;
       if (statusFilter) params.status = statusFilter;
-      const response = await api.get('/service-bookings', { params });
-      setBookings(response.data.data.data || []);
+      const [bRes, vRes, cRes, dRes] = await Promise.all([
+        api.get('/service-bookings', { params }),
+        api.get('/vehicles', { params: { per_page: 100 } }),
+        api.get('/customers', { params: { per_page: 100 } }),
+        api.get('/dealers', { params: { per_page: 100 } }),
+      ]);
+      setBookings(bRes.data.data.data || []);
+      setVehicles(vRes.data.data.data || []);
+      setCustomers(cRes.data.data.data || []);
+      setDealers(dRes.data.data.data || []);
     } catch (err) {
       console.error('Failed to load:', err);
     } finally {
@@ -26,6 +42,27 @@ export default function ServiceBookingsPage() {
   };
 
   useEffect(() => { loadData(); }, [search, statusFilter]);
+
+  const handleSave = async (data: Partial<ServiceBooking>) => {
+    setSaving(true);
+    try {
+      if (editingBooking) {
+        await api.put(`/service-bookings/${editingBooking.id}`, data);
+      } else {
+        await api.post('/service-bookings', data);
+      }
+      setPanelOpen(false);
+      setEditingBooking(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save booking:', err);
+      alert(err.response?.data?.message || 'Failed to save booking');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const closePanel = () => { setPanelOpen(false); setEditingBooking(null); };
 
   const statusColors: Record<string, string> = {
     REQUESTED: 'bg-yellow-100 text-yellow-800', CONFIRMED: 'bg-blue-100 text-blue-800',
@@ -42,7 +79,7 @@ export default function ServiceBookingsPage() {
           <p className="text-gray-600 text-sm">Manage service bookings and appointments</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/service-bookings/create'; }}
+          onClick={() => { setEditingBooking(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + New Booking
@@ -97,8 +134,7 @@ export default function ServiceBookingsPage() {
                     <span className={`px-2 py-1 rounded-full text-xs ${statusColors[b.status]}`}>{b.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = '/service-bookings/' + b.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = '/service-bookings/' + b.id + '/edit'; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingBooking(b); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                   </td>
                 </tr>
               ))}
@@ -106,6 +142,22 @@ export default function ServiceBookingsPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingBooking ? 'Edit Service Booking' : 'Create Service Booking'}
+        widthClass="max-w-2xl"
+      >
+        <ServiceBookingForm
+          booking={editingBooking}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          vehicles={vehicles}
+          customers={customers}
+          dealers={dealers}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

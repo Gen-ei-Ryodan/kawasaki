@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import VehicleForm from '@/components/forms/VehicleForm';
 import { Vehicle, VehicleModel, Dealer } from '@/types';
 
 export default function VehiclesPage() {
@@ -12,6 +14,9 @@ export default function VehiclesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
@@ -35,10 +40,31 @@ export default function VehiclesPage() {
 
   useEffect(() => { loadData(); }, [search, statusFilter]);
 
+  const handleSave = async (data: Partial<Vehicle>) => {
+    setSaving(true);
+    try {
+      if (editingVehicle) {
+        await api.put(`/vehicles/${editingVehicle.id}`, data);
+      } else {
+        await api.post('/vehicles', data);
+      }
+      setPanelOpen(false);
+      setEditingVehicle(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save vehicle:', err);
+      alert(err.response?.data?.message || 'Failed to save vehicle');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this vehicle?')) return;
     try { await api.delete(`/vehicles/${id}`); loadData(); } catch (err) { console.error(err); }
   };
+
+  const closePanel = () => { setPanelOpen(false); setEditingVehicle(null); };
 
   const statusColors: Record<string, string> = {
     IN_STOCK: 'bg-blue-100 text-blue-800', BOOKED: 'bg-yellow-100 text-yellow-800',
@@ -55,7 +81,7 @@ export default function VehiclesPage() {
           <p className="text-gray-600 text-sm">Manage vehicle units and inventory</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/vehicles/create'; }}
+          onClick={() => { setEditingVehicle(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Vehicle
@@ -111,7 +137,7 @@ export default function VehiclesPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/vehicles/" + v.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = "/vehicles/" + v.id + "/edit"; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingVehicle(v); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     <button onClick={() => handleDelete(v.id)} className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
@@ -120,6 +146,21 @@ export default function VehiclesPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingVehicle ? 'Edit Vehicle' : 'Create Vehicle'}
+        widthClass="max-w-2xl"
+      >
+        <VehicleForm
+          vehicle={editingVehicle}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          models={models}
+          dealers={dealers}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

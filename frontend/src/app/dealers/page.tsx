@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
+import DealerForm from '@/components/forms/DealerForm';
 import { Dealer } from '@/types';
 
 export default function DealersPage() {
@@ -129,9 +130,14 @@ export default function DealersPage() {
       <SlidePanel
         isOpen={panelOpen}
         onClose={() => { setPanelOpen(false); setEditingDealer(null); }}
-        dealer={editingDealer}
-        onSave={handleSave}
-      />
+        title={editingDealer ? 'Edit Dealer' : 'Create Dealer'}
+      >
+        <DealerForm
+          dealer={editingDealer}
+          onSave={handleSave}
+          onClose={() => { setPanelOpen(false); setEditingDealer(null); }}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

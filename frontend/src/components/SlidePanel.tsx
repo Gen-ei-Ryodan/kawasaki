@@ -1,157 +1,79 @@
 'use client';
 
-import { useState } from 'react';
-import { Dealer } from '@/types';
-
-interface DealerFormProps {
-  dealer: Dealer | null;
-  onSave: (data: Partial<Dealer>) => void;
-  onClose: () => void;
-}
-
-function DealerForm({ dealer, onSave, onClose }: DealerFormProps) {
-  const [formData, setFormData] = useState({
-    dealer_code: dealer?.dealer_code || '',
-    name: dealer?.name || '',
-    phone: dealer?.phone || '',
-    email: dealer?.email || '',
-    address: dealer?.address || '',
-    city: dealer?.city || '',
-    province: dealer?.province || '',
-    status: dealer?.status || 'ACTIVE',
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Dealer Code</label>
-        <input
-          type="text"
-          value={formData.dealer_code}
-          onChange={(e) => setFormData({ ...formData, dealer_code: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-        <input
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          required
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-          <input
-            type="text"
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-          <input
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-          <input
-            type="text"
-            value={formData.city}
-            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Province</label>
-          <input
-            type="text"
-            value={formData.province}
-            onChange={(e) => setFormData({ ...formData, province: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
-        </div>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-        <textarea
-          value={formData.address}
-          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-          rows={2}
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-        <select
-          value={formData.status}
-          onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-        >
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="INACTIVE">INACTIVE</option>
-        </select>
-      </div>
-      <div className="flex justify-end space-x-3 pt-4 border-t">
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-        >
-          {dealer ? 'Update' : 'Create'}
-        </button>
-      </div>
-    </form>
-  );
-}
+import { useEffect } from 'react';
+import { X } from 'lucide-react';
 
 interface SlidePanelProps {
   isOpen: boolean;
   onClose: () => void;
-  dealer: Dealer | null;
-  onSave: (data: Partial<Dealer>) => void;
+  title: string;
+  children: React.ReactNode;
+  /** Optional width override — defaults to max-w-lg (32rem) */
+  widthClass?: string;
 }
 
-export default function SlidePanel({ isOpen, onClose, dealer, onSave }: SlidePanelProps) {
-  if (!isOpen) return null;
+/**
+ * Right-side slide-over panel with backdrop.
+ * - Closes on backdrop click or Escape key.
+ * - Locks body scroll while open.
+ * - Smooth slide+fade transition.
+ */
+export default function SlidePanel({
+  isOpen,
+  onClose,
+  title,
+  children,
+  widthClass = 'max-w-lg',
+}: SlidePanelProps) {
+  // Lock body scroll + handle Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isOpen, onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
-      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose} />
-      <div className="absolute right-0 top-0 h-full w-full max-w-lg bg-white shadow-xl flex flex-col">
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-semibold">
-            {dealer ? 'Edit Dealer' : 'Create Dealer'}
-          </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">
-            ✕
+    <div
+      className={`fixed inset-0 z-50 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      aria-hidden={!isOpen}
+      role="dialog"
+      aria-modal="true"
+    >
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        className={`absolute inset-0 bg-black transition-opacity duration-300 ease-out ${
+          isOpen ? 'opacity-50' : 'opacity-0'
+        }`}
+      />
+
+      {/* Panel */}
+      <div
+        className={`absolute right-0 top-0 h-full w-full ${widthClass} bg-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white">
+          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-700 transition-colors rounded p-1 hover:bg-gray-100"
+            aria-label="Close panel"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-6">
-          <DealerForm dealer={dealer} onSave={onSave} onClose={onClose} />
-        </div>
+        <div className="flex-1 overflow-y-auto p-6 bg-gray-50">{children}</div>
       </div>
     </div>
   );

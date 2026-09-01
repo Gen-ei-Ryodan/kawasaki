@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import ServiceForm from '@/components/forms/ServiceForm';
 import { ServiceRecord, Vehicle, Customer, Dealer } from '@/types';
 
 export default function ServicesPage() {
@@ -13,6 +15,9 @@ export default function ServicesPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingService, setEditingService] = useState<ServiceRecord | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
@@ -38,6 +43,27 @@ export default function ServicesPage() {
 
   useEffect(() => { loadData(); }, [search, statusFilter]);
 
+  const handleSave = async (data: Partial<ServiceRecord>) => {
+    setSaving(true);
+    try {
+      if (editingService) {
+        await api.put(`/services/${editingService.id}`, data);
+      } else {
+        await api.post('/services', data);
+      }
+      setPanelOpen(false);
+      setEditingService(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save service:', err);
+      alert(err.response?.data?.message || 'Failed to save service');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const closePanel = () => { setPanelOpen(false); setEditingService(null); };
+
   const statusColors: Record<string, string> = {
     PENDING: 'bg-yellow-100 text-yellow-800', IN_PROGRESS: 'bg-blue-100 text-blue-800',
     COMPLETED: 'bg-green-100 text-green-800', CANCELLED: 'bg-red-100 text-red-800',
@@ -51,7 +77,7 @@ export default function ServicesPage() {
           <p className="text-gray-600 text-sm">Manage vehicle service records</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/services/create'; }}
+          onClick={() => { setEditingService(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + New Service
@@ -110,7 +136,7 @@ export default function ServicesPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/services/" + s.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = "/services/" + s.id + "/edit"; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingService(s); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                   </td>
                 </tr>
               ))}
@@ -118,6 +144,22 @@ export default function ServicesPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingService ? 'Edit Service' : 'Create Service'}
+        widthClass="max-w-2xl"
+      >
+        <ServiceForm
+          service={editingService}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          vehicles={vehicles}
+          customers={customers}
+          dealers={dealers}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

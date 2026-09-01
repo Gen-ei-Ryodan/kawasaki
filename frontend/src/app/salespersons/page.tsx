@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import SalespersonForm from '@/components/forms/SalespersonForm';
 import { Salesperson, Dealer } from '@/types';
 
 export default function SalespersonsPage() {
@@ -11,6 +13,9 @@ export default function SalespersonsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [dealerFilter, setDealerFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingSalesperson, setEditingSalesperson] = useState<Salesperson | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
@@ -32,10 +37,31 @@ export default function SalespersonsPage() {
 
   useEffect(() => { loadData(); }, [search, dealerFilter]);
 
+  const handleSave = async (data: Partial<Salesperson>) => {
+    setSaving(true);
+    try {
+      if (editingSalesperson) {
+        await api.put(`/salespersons/${editingSalesperson.id}`, data);
+      } else {
+        await api.post('/salespersons', data);
+      }
+      setPanelOpen(false);
+      setEditingSalesperson(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save salesperson:', err);
+      alert(err.response?.data?.message || 'Failed to save salesperson');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this salesperson?')) return;
     try { await api.delete(`/salespersons/${id}`); loadData(); } catch (err) { console.error(err); }
   };
+
+  const closePanel = () => { setPanelOpen(false); setEditingSalesperson(null); };
 
   return (
     <Layout>
@@ -45,7 +71,7 @@ export default function SalespersonsPage() {
           <p className="text-gray-600 text-sm">Manage Kawasaki sales team</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/salespersons/create'; }}
+          onClick={() => { setEditingSalesperson(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Salesperson
@@ -99,7 +125,7 @@ export default function SalespersonsPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/salespersons/" + sp.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = "/salespersons/" + sp.id + "/edit"; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingSalesperson(sp); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     <button onClick={() => handleDelete(sp.id)} className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
@@ -108,6 +134,20 @@ export default function SalespersonsPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingSalesperson ? 'Edit Salesperson' : 'Create Salesperson'}
+        widthClass="max-w-2xl"
+      >
+        <SalespersonForm
+          salesperson={editingSalesperson}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          dealers={dealers}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

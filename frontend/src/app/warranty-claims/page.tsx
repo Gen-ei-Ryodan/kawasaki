@@ -3,21 +3,37 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
-import { Vehicle, Customer } from '@/types';
+import SlidePanel from '@/components/SlidePanel';
+import WarrantyClaimForm from '@/components/forms/WarrantyClaimForm';
+import { WarrantyClaim, Vehicle, Customer, Warranty } from '@/types';
 
 export default function WarrantyClaimsPage() {
-  const [claims, setClaims] = useState<any[]>([]);
+  const [claims, setClaims] = useState<WarrantyClaim[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [warranties, setWarranties] = useState<Warranty[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingClaim, setEditingClaim] = useState<WarrantyClaim | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
       if (search) params.search = search;
       if (statusFilter) params.status = statusFilter;
-      const response = await api.get('/warranty-claims', { params });
-      setClaims(response.data.data.data || []);
+      const [clRes, vRes, cRes, wRes] = await Promise.all([
+        api.get('/warranty-claims', { params }),
+        api.get('/vehicles', { params: { per_page: 100 } }),
+        api.get('/customers', { params: { per_page: 100 } }),
+        api.get('/warranties', { params: { per_page: 100, status: 'ACTIVE' } }),
+      ]);
+      setClaims(clRes.data.data.data || []);
+      setVehicles(vRes.data.data.data || []);
+      setCustomers(cRes.data.data.data || []);
+      setWarranties(wRes.data.data.data || []);
     } catch (err) {
       console.error('Failed to load:', err);
     } finally {
@@ -26,6 +42,27 @@ export default function WarrantyClaimsPage() {
   };
 
   useEffect(() => { loadData(); }, [search, statusFilter]);
+
+  const handleSave = async (data: Partial<WarrantyClaim>) => {
+    setSaving(true);
+    try {
+      if (editingClaim) {
+        await api.put(`/warranty-claims/${editingClaim.id}`, data);
+      } else {
+        await api.post('/warranty-claims', data);
+      }
+      setPanelOpen(false);
+      setEditingClaim(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save claim:', err);
+      alert(err.response?.data?.message || 'Failed to save claim');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const closePanel = () => { setPanelOpen(false); setEditingClaim(null); };
 
   const statusColors: Record<string, string> = {
     SUBMITTED: 'bg-yellow-100 text-yellow-800', UNDER_REVIEW: 'bg-blue-100 text-blue-800',
@@ -41,7 +78,7 @@ export default function WarrantyClaimsPage() {
           <p className="text-gray-600 text-sm">Manage warranty claims and repairs</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/warranty-claims/create'; }}
+          onClick={() => { setEditingClaim(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + New Claim
@@ -96,8 +133,7 @@ export default function WarrantyClaimsPage() {
                     <span className={`px-2 py-1 rounded-full text-xs ${statusColors[c.status]}`}>{c.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = '/warranty-claims/' + c.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = '/warranty-claims/' + c.id + '/edit'; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingClaim(c); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                   </td>
                 </tr>
               ))}
@@ -105,6 +141,22 @@ export default function WarrantyClaimsPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingClaim ? 'Edit Warranty Claim' : 'Create Warranty Claim'}
+        widthClass="max-w-2xl"
+      >
+        <WarrantyClaimForm
+          claim={editingClaim}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          vehicles={vehicles}
+          customers={customers}
+          warranties={warranties}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

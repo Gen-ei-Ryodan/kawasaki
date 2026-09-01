@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import SalesTargetForm from '@/components/forms/SalesTargetForm';
 import { SalesTarget, Salesperson, Dealer } from '@/types';
 
 export default function SalesTargetsPage() {
@@ -10,6 +12,9 @@ export default function SalesTargetsPage() {
   const [salespersons, setSalespersons] = useState<Salesperson[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingTarget, setEditingTarget] = useState<SalesTarget | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
@@ -30,10 +35,31 @@ export default function SalesTargetsPage() {
 
   useEffect(() => { loadData(); }, []);
 
+  const handleSave = async (data: Partial<SalesTarget>) => {
+    setSaving(true);
+    try {
+      if (editingTarget) {
+        await api.put(`/sales-targets/${editingTarget.id}`, data);
+      } else {
+        await api.post('/sales-targets', data);
+      }
+      setPanelOpen(false);
+      setEditingTarget(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save target:', err);
+      alert(err.response?.data?.message || 'Failed to save target');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this target?')) return;
     try { await api.delete(`/sales-targets/${id}`); loadData(); } catch (err) { console.error(err); }
   };
+
+  const closePanel = () => { setPanelOpen(false); setEditingTarget(null); };
 
   return (
     <Layout>
@@ -43,7 +69,7 @@ export default function SalesTargetsPage() {
           <p className="text-gray-600 text-sm">Manage sales targets and achievements</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/sales-targets/create'; }}
+          onClick={() => { setEditingTarget(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + New Target
@@ -79,8 +105,7 @@ export default function SalesTargetsPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = "/sales-targets/" + t.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = "/sales-targets/" + t.id + "/edit"; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingTarget(t); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     <button onClick={() => handleDelete(t.id)} className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
@@ -89,6 +114,21 @@ export default function SalesTargetsPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingTarget ? 'Edit Sales Target' : 'Create Sales Target'}
+        widthClass="max-w-2xl"
+      >
+        <SalesTargetForm
+          target={editingTarget}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          salespersons={salespersons}
+          dealers={dealers}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

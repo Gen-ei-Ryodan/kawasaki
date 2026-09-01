@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import LeadForm from '@/components/forms/LeadForm';
 import { Lead, Dealer, Salesperson, VehicleModel } from '@/types';
 
 export default function LeadsPage() {
@@ -13,6 +15,9 @@ export default function LeadsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingLead, setEditingLead] = useState<Lead | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadData = async () => {
     try {
@@ -38,6 +43,25 @@ export default function LeadsPage() {
 
   useEffect(() => { loadData(); }, [search, statusFilter]);
 
+  const handleSave = async (data: Partial<Lead>) => {
+    setSaving(true);
+    try {
+      if (editingLead) {
+        await api.put(`/leads/${editingLead.id}`, data);
+      } else {
+        await api.post('/leads', data);
+      }
+      setPanelOpen(false);
+      setEditingLead(null);
+      loadData();
+    } catch (err: any) {
+      console.error('Failed to save lead:', err);
+      alert(err.response?.data?.message || 'Failed to save lead');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this lead?')) return;
     try { await api.delete(`/leads/${id}`); loadData(); } catch (err) { console.error(err); }
@@ -51,6 +75,8 @@ export default function LeadsPage() {
       alert(err.response?.data?.message || 'Failed to change status');
     }
   };
+
+  const closePanel = () => { setPanelOpen(false); setEditingLead(null); };
 
   const statusColors: Record<string, string> = {
     COLD: 'bg-blue-100 text-blue-800', WARM: 'bg-yellow-100 text-yellow-800',
@@ -66,7 +92,7 @@ export default function LeadsPage() {
           <p className="text-gray-600 text-sm">Manage sales leads and pipeline</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/leads/create'; }}
+          onClick={() => { setEditingLead(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Lead
@@ -136,7 +162,7 @@ export default function LeadsPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/leads/" + lead.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = "/leads/" + lead.id + "/edit"; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingLead(lead); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     <button onClick={() => handleDelete(lead.id)} className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
@@ -145,6 +171,22 @@ export default function LeadsPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingLead ? 'Edit Lead' : 'Create Lead'}
+        widthClass="max-w-2xl"
+      >
+        <LeadForm
+          lead={editingLead}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+          dealers={dealers}
+          salespersons={salespersons}
+          models={models}
+        />
+      </SlidePanel>
     </Layout>
   );
 }

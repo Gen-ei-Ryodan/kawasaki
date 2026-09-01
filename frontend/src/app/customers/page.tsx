@@ -3,12 +3,17 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
+import SlidePanel from '@/components/SlidePanel';
+import CustomerForm from '@/components/forms/CustomerForm';
 import { Customer } from '@/types';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const loadCustomers = async () => {
     try {
@@ -25,10 +30,31 @@ export default function CustomersPage() {
 
   useEffect(() => { loadCustomers(); }, [search]);
 
+  const handleSave = async (data: Partial<Customer>) => {
+    setSaving(true);
+    try {
+      if (editingCustomer) {
+        await api.put(`/customers/${editingCustomer.id}`, data);
+      } else {
+        await api.post('/customers', data);
+      }
+      setPanelOpen(false);
+      setEditingCustomer(null);
+      loadCustomers();
+    } catch (err: any) {
+      console.error('Failed to save customer:', err);
+      alert(err.response?.data?.message || 'Failed to save customer');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this customer?')) return;
     try { await api.delete('/customers/' + id); loadCustomers(); } catch (err) { console.error(err); }
   };
+
+  const closePanel = () => { setPanelOpen(false); setEditingCustomer(null); };
 
   return (
     <Layout>
@@ -38,7 +64,7 @@ export default function CustomersPage() {
           <p className="text-gray-600 text-sm">Manage Kawasaki customers</p>
         </div>
         <button
-          onClick={() => { window.location.href = '/customers/create'; }}
+          onClick={() => { setEditingCustomer(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Customer
@@ -84,7 +110,7 @@ export default function CustomersPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = '/customers/' + c.id; }} className="text-blue-600 hover:text-blue-900">View</button>
-                    <button onClick={() => { window.location.href = '/customers/' + c.id + '/edit'; }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    <button onClick={() => { setEditingCustomer(c); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     <button onClick={() => handleDelete(c.id)} className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
@@ -93,6 +119,19 @@ export default function CustomersPage() {
           </table>
         </div>
       )}
+      <SlidePanel
+        isOpen={panelOpen}
+        onClose={closePanel}
+        title={editingCustomer ? 'Edit Customer' : 'Create Customer'}
+        widthClass="max-w-2xl"
+      >
+        <CustomerForm
+          customer={editingCustomer}
+          onSave={handleSave}
+          onClose={closePanel}
+          saving={saving}
+        />
+      </SlidePanel>
     </Layout>
   );
 }
