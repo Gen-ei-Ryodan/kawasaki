@@ -75,7 +75,7 @@ Route::prefix('v1')->group(function () {
 
 // Service
         Route::apiResource('services', ServiceController::class);
-        Route::apiResource('service-bookings', ServiceBookingController::class);
+        Route::apiResource('service-bookings', \App\Http\Controllers\ServiceBookingController::class);
         Route::get('/vehicles/{vehicle}/service-records', [ServiceController::class, 'recordsByVehicle']);
         Route::get('/service-schedules', [\App\Http\Controllers\ServiceScheduleController::class, 'index']);
         Route::get('/service-reminders', [\App\Http\Controllers\ServiceScheduleController::class, 'reminders']);
@@ -102,6 +102,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/reports/salesperson-ranking', [ReportController::class, 'salespersonRanking']);
         Route::get('/reports/service', [ReportController::class, 'service']);
         Route::get('/reports/loyalty', [ReportController::class, 'loyalty']);
+        Route::get('/reports/sales-analytics', [ReportController::class, 'salesAnalytics']);
+
+        // Notifications
+        Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
+        Route::put('/notifications/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
+        Route::get('/notifications/unread-count', [\App\Http\Controllers\NotificationController::class, 'unreadCount']);
+
+        // Vehicle Documents
+        Route::get('/vehicle-documents', [\App\Http\Controllers\VehicleDocumentController::class, 'index']);
 
         // Global search
         Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search']);
