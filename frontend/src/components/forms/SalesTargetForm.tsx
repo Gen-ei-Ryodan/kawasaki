@@ -47,7 +47,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
           <select
             value={formData.salesperson_id}
             onChange={(e) => setFormData({ ...formData, salesperson_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           >
             <option value="">Select Salesperson</option>
@@ -61,7 +61,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
             value={formData.period}
             onChange={(e) => setFormData({ ...formData, period: e.target.value })}
             placeholder="e.g. 2026-09"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -72,7 +72,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
           <select
             value={formData.dealer_id}
             onChange={(e) => setFormData({ ...formData, dealer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {dealers.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
@@ -84,7 +84,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
             type="number"
             value={formData.target_units}
             onChange={(e) => setFormData({ ...formData, target_units: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -94,7 +94,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
             type="number"
             value={formData.target_revenue}
             onChange={(e) => setFormData({ ...formData, target_revenue: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -106,7 +106,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
             type="date"
             value={formData.start_date}
             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -115,7 +115,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
             type="date"
             value={formData.end_date}
             onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function SalesTargetForm({ target, onSave, onClose, saving, sales
         <select
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         >
           <option value="ACTIVE">Active</option>
           <option value="COMPLETED">Completed</option>

@@ -54,7 +54,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
           <select
             value={formData.vehicle_id}
             onChange={(e) => setFormData({ ...formData, vehicle_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           >
             <option value="">Select Vehicle</option>
@@ -67,7 +67,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
             type="date"
             value={formData.service_date}
             onChange={(e) => setFormData({ ...formData, service_date: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -78,7 +78,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
           <select
             value={formData.customer_id}
             onChange={(e) => setFormData({ ...formData, customer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.full_name}</option>)}
@@ -89,7 +89,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
           <select
             value={formData.dealer_id}
             onChange={(e) => setFormData({ ...formData, dealer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {dealers.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
@@ -100,7 +100,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
           <select
             value={formData.service_type}
             onChange={(e) => setFormData({ ...formData, service_type: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             {['ROUTINE','PERIODIC','REPAIR','WARRANTY','INSPECTION','OTHER'].map((t) => (
               <option key={t} value={t}>{t}</option>
@@ -115,7 +115,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
             type="number"
             value={formData.odometer}
             onChange={(e) => setFormData({ ...formData, odometer: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -124,7 +124,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
             type="number"
             value={formData.total_cost}
             onChange={(e) => setFormData({ ...formData, total_cost: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
         <textarea
           value={formData.complaint}
           onChange={(e) => setFormData({ ...formData, complaint: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>
@@ -142,7 +142,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
         <textarea
           value={formData.diagnosis}
           onChange={(e) => setFormData({ ...formData, diagnosis: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>
@@ -151,7 +151,7 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
         <select
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         >
           <option value="PENDING">Pending</option>
           <option value="IN_PROGRESS">In Progress</option>

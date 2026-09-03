@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('lead_id')->nullable()->constrained();
             $table->foreignId('customer_id')->nullable()->constrained();
-            $table->foreignId('salesperson_id')->constrained();
+            $table->foreignId('salesperson_id')->constrained('salespersons');
             $table->date('follow_up_date');
             $table->time('follow_up_time')->nullable();
             $table->enum('channel', ['PHONE', 'WHATSAPP', 'EMAIL', 'VISIT', 'SHOWROOM', 'VIDEO_CALL', 'OTHER'])->nullable();

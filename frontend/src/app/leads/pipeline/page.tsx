@@ -32,12 +32,12 @@ export default function PipelinePage() {
   };
 
   const columns = [
-    { key: 'COLD', label: 'Cold', color: 'bg-blue-500' },
-    { key: 'WARM', label: 'Warm', color: 'bg-yellow-500' },
-    { key: 'HOT', label: 'Hot', color: 'bg-red-500' },
-    { key: 'HOLD', label: 'Hold', color: 'bg-gray-500' },
-    { key: 'WON', label: 'Won', color: 'bg-green-500' },
-    { key: 'LOST', label: 'Lost', color: 'bg-gray-400' },
+    { key: 'COLD', label: 'Cold', color: 'rgb(29, 78, 216)' },
+    { key: 'WARM', label: 'Warm', color: 'rgb(202, 138, 4)' },
+    { key: 'HOT', label: 'Hot', color: 'rgb(185, 28, 28)' },
+    { key: 'HOLD', label: 'Hold', color: 'rgb(75, 85, 99)' },
+    { key: 'WON', label: 'Won', color: 'rgb(21, 128, 61)' },
+    { key: 'LOST', label: 'Lost', color: 'rgb(107, 114, 128)' },
   ];
 
   return (
@@ -51,7 +51,7 @@ export default function PipelinePage() {
           <div className="grid grid-cols-6 gap-4 mb-6">
             {columns.map(col => (
               <div key={col.key} className="bg-white p-4 rounded-lg shadow text-center">
-                <div className={`w-3 h-3 rounded-full ${col.color} mx-auto mb-2`}></div>
+                <div className="w-3 h-3 rounded-full mx-auto mb-2" style={{ backgroundColor: col.color }}></div>
                 <p className="text-2xl font-bold text-gray-800">{pipeline?.counts?.[col.key] || 0}</p>
                 <p className="text-xs text-gray-500">{col.label}</p>
               </div>
@@ -60,8 +60,8 @@ export default function PipelinePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {columns.map(col => (
-              <div key={col.key} className="bg-gray-50 rounded-lg p-3">
-                <h3 className="font-semibold text-sm mb-3 text-gray-700">{col.label}</h3>
+              <div key={col.key} className="rounded-lg p-3" style={{ backgroundColor: col.color }}>
+                <h3 className="font-semibold text-sm mb-3 text-white">{col.label}</h3>
                 <div className="space-y-2">
                   {(pipeline?.[col.key] || []).map((lead: Lead) => (
                     <div

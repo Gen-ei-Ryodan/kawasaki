@@ -64,7 +64,7 @@ export default function DashboardPage() {
 
           {funnel && (
             <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">Sales Funnel</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Sales Funnel</h2>
               <div className="grid grid-cols-3 md:grid-cols-7 gap-4">
                 {['total_leads', 'cold', 'warm', 'hot', 'hold', 'won', 'lost'].map(key => (
                   <div key={key} className="text-center">

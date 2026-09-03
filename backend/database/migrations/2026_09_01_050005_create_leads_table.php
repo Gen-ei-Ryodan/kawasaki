@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->enum('source', ['WALK_IN', 'WEBSITE', 'WHATSAPP', 'INSTAGRAM', 'FACEBOOK', 'REFERRAL', 'EVENT', 'ADVERTISEMENT', 'PHONE', 'OTHER'])->nullable();
             $table->foreignId('interested_model_id')->nullable()->constrained('vehicle_models');
-            $table->foreignId('salesperson_id')->nullable()->constrained();
+            $table->foreignId('salesperson_id')->nullable()->constrained('salespersons');
             $table->foreignId('dealer_id')->nullable()->constrained();
             $table->decimal('estimated_budget', 15, 2)->nullable();
             $table->text('notes')->nullable();

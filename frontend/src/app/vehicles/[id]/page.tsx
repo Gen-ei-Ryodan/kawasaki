@@ -42,7 +42,7 @@ export default function VehicleDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Identity</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Identity</h2>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div><span className="text-gray-500">VIN:</span> <span className="font-medium text-gray-800">{vehicle?.vin}</span></div>
             <div><span className="text-gray-500">Engine:</span> <span className="font-medium text-gray-800">{vehicle?.engine_number}</span></div>
@@ -54,7 +54,7 @@ export default function VehicleDetailPage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Current Owner</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Owner</h2>
           {vehicle?.currentOwner ? (
             <div className="text-sm">
               <p className="font-medium text-gray-800">{vehicle.currentOwner.customer?.full_name}</p>
@@ -67,7 +67,7 @@ export default function VehicleDetailPage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Service Summary</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Service Summary</h2>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div><span className="text-gray-500">Total Services:</span> <span className="font-medium text-gray-800">{vehicle?.stats?.total_services}</span></div>
             <div><span className="text-gray-500">Total Cost:</span> <span className="font-medium text-gray-800">Rp{vehicle?.stats?.total_service_cost?.toLocaleString('id-ID')}</span></div>
@@ -77,7 +77,7 @@ export default function VehicleDetailPage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Warranty</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Warranty</h2>
           {vehicle?.stats?.warranty ? (
             <div className="text-sm">
               <p className="font-medium text-gray-800">{vehicle.stats.warranty.warranty_number}</p>

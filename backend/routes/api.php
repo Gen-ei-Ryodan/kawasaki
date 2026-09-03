@@ -46,11 +46,11 @@ Route::prefix('v1')->group(function () {
         // Vehicle Models
         Route::apiResource('vehicle-models', VehicleModelController::class);
 
-        // Leads
+        // Leads - pipeline BEFORE apiResource to avoid route conflict
+        Route::get('/leads/pipeline', [LeadController::class, 'pipeline']);
         Route::apiResource('leads', LeadController::class);
         Route::put('/leads/{lead}/status', [LeadController::class, 'changeStatus']);
         Route::get('/leads/{lead}/status-histories', [LeadController::class, 'statusHistories']);
-        Route::get('/leads/pipeline', [LeadController::class, 'pipeline']);
 
         // Follow Ups
         Route::apiResource('follow-ups', FollowUpController::class);

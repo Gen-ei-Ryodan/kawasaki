@@ -84,13 +84,13 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
               <input type="text" value={formData.name}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" required />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select value={formData.status}
                 onChange={e => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="COLD">Cold</option>
                 <option value="WARM">Warm</option>
                 <option value="HOT">Hot</option>
@@ -105,13 +105,13 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
               <input type="text" value={formData.phone}
                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input type="email" value={formData.email}
                 onChange={e => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -119,7 +119,7 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Source</label>
               <select value={formData.source}
                 onChange={e => setFormData({ ...formData, source: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {['WALK_IN','WEBSITE','WHATSAPP','INSTAGRAM','FACEBOOK','REFERRAL','EVENT','ADVERTISEMENT','PHONE','OTHER'].map(s => (
                   <option key={s} value={s}>{s.replace('_', ' ')}</option>
@@ -130,7 +130,7 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Dealer</label>
               <select value={formData.dealer_id}
                 onChange={e => setFormData({ ...formData, dealer_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {dealers.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
               </select>
@@ -139,7 +139,7 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Salesperson</label>
               <select value={formData.salesperson_id}
                 onChange={e => setFormData({ ...formData, salesperson_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {salespersons.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
@@ -150,7 +150,7 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Interested Model</label>
               <select value={formData.interested_model_id}
                 onChange={e => setFormData({ ...formData, interested_model_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {models.map(m => <option key={m.id} value={m.id}>{m.brand} {m.model}</option>)}
               </select>
@@ -159,14 +159,14 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">Estimated Budget</label>
               <input type="number" value={formData.estimated_budget}
                 onChange={e => setFormData({ ...formData, estimated_budget: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
             <textarea value={formData.notes}
               onChange={e => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" rows={2} />
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" rows={2} />
           </div>
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <button type="button" onClick={() => router.push('/leads')}

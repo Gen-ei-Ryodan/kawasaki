@@ -72,7 +72,7 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Customer</label>
               <select value={formData.customer_id}
                 onChange={e => setFormData({ ...formData, customer_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select Customer</option>
                 {customers.map(c => <option key={c.id} value={c.id}>{c.full_name}</option>)}
               </select>
@@ -81,7 +81,7 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle</label>
               <select value={formData.vehicle_id}
                 onChange={e => setFormData({ ...formData, vehicle_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select Vehicle</option>
                 {vehicles.map(v => <option key={v.id} value={v.id}>{v.vin} ({v.color})</option>)}
               </select>
@@ -92,7 +92,7 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Salesperson</label>
               <select value={formData.salesperson_id}
                 onChange={e => setFormData({ ...formData, salesperson_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {salespersons.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
@@ -101,7 +101,7 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Dealer</label>
               <select value={formData.dealer_id}
                 onChange={e => setFormData({ ...formData, dealer_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {dealers.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
               </select>
@@ -110,7 +110,7 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Sale Date</label>
               <input type="date" value={formData.sale_date}
                 onChange={e => setFormData({ ...formData, sale_date: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -118,19 +118,19 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Price</label>
               <input type="number" value={formData.vehicle_price}
                 onChange={e => setFormData({ ...formData, vehicle_price: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Discount</label>
               <input type="number" value={formData.discount}
                 onChange={e => setFormData({ ...formData, discount: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Additional Cost</label>
               <input type="number" value={formData.additional_cost}
                 onChange={e => setFormData({ ...formData, additional_cost: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -138,7 +138,7 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
               <select value={formData.payment_method}
                 onChange={e => setFormData({ ...formData, payment_method: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 <option value="CASH">Cash</option>
                 <option value="CREDIT">Credit</option>
@@ -150,7 +150,7 @@ export default function CreateSalePage() {
               <label className="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
               <select value={formData.payment_status}
                 onChange={e => setFormData({ ...formData, payment_status: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="UNPAID">Unpaid</option>
                 <option value="PARTIAL">Partial</option>
                 <option value="PAID">Paid</option>

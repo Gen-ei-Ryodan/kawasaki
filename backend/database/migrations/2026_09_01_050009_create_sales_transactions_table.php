@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('transaction_number')->unique();
             $table->foreignId('lead_id')->nullable()->constrained();
             $table->foreignId('customer_id')->nullable()->constrained();
-            $table->foreignId('salesperson_id')->nullable()->constrained();
+            $table->foreignId('salesperson_id')->nullable()->constrained('salespersons');
             $table->foreignId('dealer_id')->nullable()->constrained();
             $table->foreignId('vehicle_id')->nullable()->constrained();
             $table->date('sale_date')->nullable();

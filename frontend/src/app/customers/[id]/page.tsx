@@ -62,7 +62,7 @@ export default function CustomerDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Vehicles</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Vehicles</h2>
           <div className="space-y-2">
             {customer?.vehicles?.map((v: Vehicle) => (
               <div key={v.id} className="p-3 bg-gray-50 rounded">
@@ -73,7 +73,7 @@ export default function CustomerDetailPage() {
           </div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Recent Sales</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Sales</h2>
           <div className="space-y-2">
             {customer?.salesTransactions?.slice(0, 5).map((s: SalesTransaction) => (
               <div key={s.id} className="p-3 bg-gray-50 rounded">

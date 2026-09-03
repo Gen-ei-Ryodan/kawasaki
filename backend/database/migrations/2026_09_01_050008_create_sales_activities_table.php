@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('sales_activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('salesperson_id')->constrained();
+            $table->foreignId('salesperson_id')->constrained('salespersons');
             $table->foreignId('lead_id')->nullable()->constrained();
             $table->foreignId('customer_id')->nullable()->constrained();
             $table->enum('activity_type', ['CALL', 'WHATSAPP', 'MEETING', 'TEST_RIDE', 'PRICE_QUOTE', 'FOLLOW_UP', 'PURCHASE', 'OTHER']);

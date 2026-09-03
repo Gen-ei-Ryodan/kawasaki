@@ -45,7 +45,7 @@ export default function SalespersonForm({ salesperson, onSave, onClose, saving, 
             type="text"
             value={formData.employee_code}
             onChange={(e) => setFormData({ ...formData, employee_code: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -55,7 +55,7 @@ export default function SalespersonForm({ salesperson, onSave, onClose, saving, 
             type="text"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -67,7 +67,7 @@ export default function SalespersonForm({ salesperson, onSave, onClose, saving, 
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -76,7 +76,7 @@ export default function SalespersonForm({ salesperson, onSave, onClose, saving, 
             type="text"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@ export default function SalespersonForm({ salesperson, onSave, onClose, saving, 
           <select
             value={formData.dealer_id}
             onChange={(e) => setFormData({ ...formData, dealer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           >
             <option value="">Select Dealer</option>
@@ -99,7 +99,7 @@ export default function SalespersonForm({ salesperson, onSave, onClose, saving, 
             type="date"
             value={formData.join_date}
             onChange={(e) => setFormData({ ...formData, join_date: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -108,7 +108,7 @@ export default function SalespersonForm({ salesperson, onSave, onClose, saving, 
         <select
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         >
           <option value="ACTIVE">ACTIVE</option>
           <option value="INACTIVE">INACTIVE</option>

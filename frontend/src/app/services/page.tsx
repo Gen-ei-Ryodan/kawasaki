@@ -89,12 +89,12 @@ export default function ServicesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search service number..."
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         />
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500"
+          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         >
           <option value="">All Status</option>
           <option value="PENDING">Pending</option>

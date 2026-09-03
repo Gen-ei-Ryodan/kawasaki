@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('sales_targets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('salesperson_id')->constrained();
+            $table->foreignId('salesperson_id')->constrained('salespersons');
             $table->foreignId('dealer_id')->nullable()->constrained();
             $table->string('period');
             $table->integer('target_units')->default(0);

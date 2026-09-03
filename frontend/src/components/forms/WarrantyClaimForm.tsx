@@ -52,7 +52,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
           <select
             value={formData.vehicle_id}
             onChange={(e) => setFormData({ ...formData, vehicle_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           >
             <option value="">Select Vehicle</option>
@@ -65,7 +65,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
             type="date"
             value={formData.claim_date}
             onChange={(e) => setFormData({ ...formData, claim_date: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -76,7 +76,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
           <select
             value={formData.customer_id}
             onChange={(e) => setFormData({ ...formData, customer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.full_name}</option>)}
@@ -87,7 +87,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
           <select
             value={formData.warranty_id}
             onChange={(e) => setFormData({ ...formData, warranty_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {warranties.map((w) => <option key={w.id} value={w.id}>{w.warranty_number}</option>)}
@@ -98,7 +98,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
           <select
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             {['SUBMITTED','UNDER_REVIEW','APPROVED','REJECTED','COMPLETED'].map((s) => (
               <option key={s} value={s}>{s.replace('_', ' ')}</option>
@@ -111,7 +111,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
         <textarea
           value={formData.problem}
           onChange={(e) => setFormData({ ...formData, problem: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>
@@ -120,7 +120,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
         <textarea
           value={formData.diagnosis}
           onChange={(e) => setFormData({ ...formData, diagnosis: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>
@@ -129,7 +129,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
         <textarea
           value={formData.resolution}
           onChange={(e) => setFormData({ ...formData, resolution: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>
@@ -139,7 +139,7 @@ export default function WarrantyClaimForm({ claim, onSave, onClose, saving, vehi
           type="number"
           value={formData.cost}
           onChange={(e) => setFormData({ ...formData, cost: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         />
       </div>
       <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">

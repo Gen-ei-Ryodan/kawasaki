@@ -45,7 +45,7 @@ export default function WarrantyForm({ warranty, onSave, onClose, saving, vehicl
           <select
             value={formData.vehicle_id}
             onChange={(e) => setFormData({ ...formData, vehicle_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           >
             <option value="">Select Vehicle</option>
@@ -57,7 +57,7 @@ export default function WarrantyForm({ warranty, onSave, onClose, saving, vehicl
           <select
             value={formData.customer_id}
             onChange={(e) => setFormData({ ...formData, customer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.full_name}</option>)}
@@ -71,7 +71,7 @@ export default function WarrantyForm({ warranty, onSave, onClose, saving, vehicl
             type="date"
             value={formData.start_date}
             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -81,7 +81,7 @@ export default function WarrantyForm({ warranty, onSave, onClose, saving, vehicl
             type="date"
             value={formData.end_date}
             onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -91,7 +91,7 @@ export default function WarrantyForm({ warranty, onSave, onClose, saving, vehicl
             type="number"
             value={formData.warranty_period}
             onChange={(e) => setFormData({ ...formData, warranty_period: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -101,7 +101,7 @@ export default function WarrantyForm({ warranty, onSave, onClose, saving, vehicl
         <textarea
           value={formData.terms}
           onChange={(e) => setFormData({ ...formData, terms: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>
@@ -110,7 +110,7 @@ export default function WarrantyForm({ warranty, onSave, onClose, saving, vehicl
         <select
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         >
           <option value="ACTIVE">Active</option>
           <option value="EXPIRED">Expired</option>

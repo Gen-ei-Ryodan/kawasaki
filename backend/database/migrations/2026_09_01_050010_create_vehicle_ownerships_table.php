@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained();
             $table->foreignId('purchase_transaction_id')->nullable()->constrained('sales_transactions');
             $table->foreignId('dealer_id')->nullable()->constrained();
-            $table->foreignId('salesperson_id')->nullable()->constrained();
+            $table->foreignId('salesperson_id')->nullable()->constrained('salespersons');
             $table->date('purchase_date')->nullable();
             $table->date('delivery_date')->nullable();
             $table->timestamp('ownership_start')->nullable();

@@ -43,7 +43,7 @@ export default function LeadDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Lead Information</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Lead Information</h2>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div><span className="text-gray-500">Name:</span> <span className="font-medium text-gray-800">{lead?.name}</span></div>
             <div><span className="text-gray-500">Phone:</span> <span className="font-medium text-gray-800">{lead?.phone || '-'}</span></div>
@@ -55,7 +55,7 @@ export default function LeadDetailPage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Status History</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Status History</h2>
           <div className="space-y-2">
             {lead?.statusHistories?.map((h: any) => (
               <div key={h.id} className="p-3 bg-gray-50 rounded text-sm">

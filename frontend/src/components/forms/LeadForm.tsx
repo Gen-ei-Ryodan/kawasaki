@@ -53,7 +53,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
             type="text"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -62,7 +62,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
           <select
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="COLD">Cold</option>
             <option value="WARM">Warm</option>
@@ -80,7 +80,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
             type="text"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -89,7 +89,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
           <select
             value={formData.source}
             onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {['WALK_IN','WEBSITE','WHATSAPP','INSTAGRAM','FACEBOOK','REFERRAL','EVENT','ADVERTISEMENT','PHONE','OTHER'].map((s) => (
@@ -112,7 +112,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
           <select
             value={formData.dealer_id}
             onChange={(e) => setFormData({ ...formData, dealer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {dealers.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
@@ -123,7 +123,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
           <select
             value={formData.salesperson_id}
             onChange={(e) => setFormData({ ...formData, salesperson_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {salespersons.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -136,7 +136,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
           <select
             value={formData.interested_model_id}
             onChange={(e) => setFormData({ ...formData, interested_model_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select</option>
             {models.map((m) => <option key={m.id} value={m.id}>{m.brand} {m.model}</option>)}
@@ -148,7 +148,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
             type="number"
             value={formData.estimated_budget}
             onChange={(e) => setFormData({ ...formData, estimated_budget: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function LeadForm({ lead, onSave, onClose, saving, dealers = [], 
         <textarea
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>

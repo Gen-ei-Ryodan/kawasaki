@@ -84,7 +84,7 @@ export default function ServiceBookingFormPage({ isEdit = false }: { isEdit?: bo
               <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle</label>
               <select value={formData.vehicle_id}
                 onChange={e => setFormData({ ...formData, vehicle_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" required>
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" required>
                 <option value="">Select Vehicle</option>
                 {vehicles.map(v => <option key={v.id} value={v.id}>{v.vin} ({v.color})</option>)}
               </select>
@@ -93,7 +93,7 @@ export default function ServiceBookingFormPage({ isEdit = false }: { isEdit?: bo
               <label className="block text-sm font-medium text-gray-700 mb-1">Booking Date</label>
               <input type="date" value={formData.booking_date}
                 onChange={e => setFormData({ ...formData, booking_date: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" required />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" required />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -101,7 +101,7 @@ export default function ServiceBookingFormPage({ isEdit = false }: { isEdit?: bo
               <label className="block text-sm font-medium text-gray-700 mb-1">Customer</label>
               <select value={formData.customer_id}
                 onChange={e => setFormData({ ...formData, customer_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {customers.map(c => <option key={c.id} value={c.id}>{c.full_name}</option>)}
               </select>
@@ -110,7 +110,7 @@ export default function ServiceBookingFormPage({ isEdit = false }: { isEdit?: bo
               <label className="block text-sm font-medium text-gray-700 mb-1">Dealer</label>
               <select value={formData.dealer_id}
                 onChange={e => setFormData({ ...formData, dealer_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 <option value="">Select</option>
                 {dealers.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
               </select>
@@ -119,7 +119,7 @@ export default function ServiceBookingFormPage({ isEdit = false }: { isEdit?: bo
               <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
               <select value={formData.service_type}
                 onChange={e => setFormData({ ...formData, service_type: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 {['ROUTINE','PERIODIC','REPAIR','WARRANTY','INSPECTION','OTHER'].map(t => (
                   <option key={t} value={t}>{t}</option>
                 ))}
@@ -131,13 +131,13 @@ export default function ServiceBookingFormPage({ isEdit = false }: { isEdit?: bo
               <label className="block text-sm font-medium text-gray-700 mb-1">Booking Time</label>
               <input type="time" value={formData.booking_time}
                 onChange={e => setFormData({ ...formData, booking_time: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select value={formData.status}
                 onChange={e => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500">
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400">
                 {['REQUESTED','CONFIRMED','ARRIVED','IN_PROGRESS','COMPLETED','CANCELLED','NO_SHOW'].map(s => (
                   <option key={s} value={s}>{s.replace('_', ' ')}</option>
                 ))}
@@ -148,7 +148,7 @@ export default function ServiceBookingFormPage({ isEdit = false }: { isEdit?: bo
             <label className="block text-sm font-medium text-gray-700 mb-1">Complaint</label>
             <textarea value={formData.complaint}
               onChange={e => setFormData({ ...formData, complaint: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500" rows={2} />
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400" rows={2} />
           </div>
           <div className="flex justify-end space-x-3 pt-4 border-t">
             <button type="button" onClick={() => router.push('/service-bookings')}

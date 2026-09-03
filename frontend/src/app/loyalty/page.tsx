@@ -47,7 +47,7 @@ export default function LoyaltyPage() {
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Membership Tiers</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Membership Tiers</h2>
           {loading ? (
             <div>Loading...</div>
           ) : (
@@ -66,14 +66,14 @@ export default function LoyaltyPage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Rewards</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Rewards</h2>
           <div className="mb-4">
             <input
               type="text"
               value={customerId}
               onChange={(e) => setCustomerId(e.target.value)}
               placeholder="Customer ID (for redemption)"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             />
           </div>
           {loading ? (

@@ -35,7 +35,7 @@ export default function ReportsPage() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">Sales Funnel</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Sales Funnel</h2>
             {funnel && (
               <div className="space-y-3">
                 {Object.entries(funnel).filter(([k]) => k !== 'conversion_rate' && k !== 'warm_rate' && k !== 'hot_rate').map(([key, value]) => (
@@ -55,7 +55,7 @@ export default function ReportsPage() {
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">Salesperson Ranking</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Salesperson Ranking</h2>
             <div className="space-y-3">
               {ranking.map((r) => (
                 <div key={r.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">

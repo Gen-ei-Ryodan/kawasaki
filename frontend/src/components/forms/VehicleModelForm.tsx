@@ -44,7 +44,7 @@ export default function VehicleModelForm({ model, onSave, onClose, saving }: Veh
             type="text"
             value={formData.brand}
             onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -54,7 +54,7 @@ export default function VehicleModelForm({ model, onSave, onClose, saving }: Veh
             type="text"
             value={formData.model}
             onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -66,7 +66,7 @@ export default function VehicleModelForm({ model, onSave, onClose, saving }: Veh
             type="text"
             value={formData.variant}
             onChange={(e) => setFormData({ ...formData, variant: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -75,7 +75,7 @@ export default function VehicleModelForm({ model, onSave, onClose, saving }: Veh
             type="number"
             value={formData.year}
             onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -84,7 +84,7 @@ export default function VehicleModelForm({ model, onSave, onClose, saving }: Veh
             type="number"
             value={formData.engine_cc}
             onChange={(e) => setFormData({ ...formData, engine_cc: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -93,7 +93,7 @@ export default function VehicleModelForm({ model, onSave, onClose, saving }: Veh
         <textarea
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           rows={2}
         />
       </div>
@@ -102,7 +102,7 @@ export default function VehicleModelForm({ model, onSave, onClose, saving }: Veh
         <select
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         >
           <option value="ACTIVE">ACTIVE</option>
           <option value="INACTIVE">INACTIVE</option>

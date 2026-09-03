@@ -83,12 +83,12 @@ export default function SalespersonsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search name, employee code..."
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         />
         <select
           value={dealerFilter}
           onChange={(e) => setDealerFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
         >
           <option value="">All Dealers</option>
           {dealers.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}

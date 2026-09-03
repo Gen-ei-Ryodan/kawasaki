@@ -49,7 +49,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
           <select
             value={formData.vehicle_model_id}
             onChange={(e) => setFormData({ ...formData, vehicle_model_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           >
             <option value="">Select Model</option>
@@ -61,7 +61,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
           <select
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             {['IN_STOCK','BOOKED','SOLD','DELIVERED','IN_SERVICE','TRANSFERRED','SCRAPPED'].map((s) => (
               <option key={s} value={s}>{s.replace('_', ' ')}</option>
@@ -76,7 +76,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
             type="text"
             value={formData.vin}
             onChange={(e) => setFormData({ ...formData, vin: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -86,7 +86,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
             type="text"
             value={formData.engine_number}
             onChange={(e) => setFormData({ ...formData, engine_number: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
             required
           />
         </div>
@@ -98,7 +98,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
             type="text"
             value={formData.color}
             onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -107,7 +107,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
             type="number"
             value={formData.year}
             onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -116,7 +116,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
             type="text"
             value={formData.license_plate}
             onChange={(e) => setFormData({ ...formData, license_plate: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
             type="number"
             value={formData.odometer}
             onChange={(e) => setFormData({ ...formData, odometer: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           />
         </div>
         <div>
@@ -135,7 +135,7 @@ export default function VehicleForm({ vehicle, onSave, onClose, saving, models =
           <select
             value={formData.dealer_id}
             onChange={(e) => setFormData({ ...formData, dealer_id: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
           >
             <option value="">Select Dealer</option>
             {dealers.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}

@@ -48,7 +48,7 @@ export default function SalespersonDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Information</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Information</h2>
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div><span className="text-gray-500">Name:</span> <span className="font-medium text-gray-800">{sp?.name}</span></div>
             <div><span className="text-gray-500">Employee Code:</span> <span className="font-medium text-gray-800">{sp?.employee_code}</span></div>
@@ -60,7 +60,7 @@ export default function SalespersonDetailPage() {
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Achievement</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Achievement</h2>
           {achievement ? (
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div><span className="text-gray-500">Units Sold:</span> <span className="font-medium text-gray-800">{achievement.units_sold}</span></div>
