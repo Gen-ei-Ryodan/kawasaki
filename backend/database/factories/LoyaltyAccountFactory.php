@@ -13,10 +13,9 @@ class LoyaltyAccountFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_id' => null, // will be set in seeder
-            'tier_id' => null, // will be set in seeder
-            'points' => fake()->numberBetween(0, 10000),
-            'lifetime_points' => fake()->numberBetween(0, 50000),
+            'customer_id' => null,
+            'tier_id' => null,
+            'status' => 'ACTIVE',
         ];
     }
 }

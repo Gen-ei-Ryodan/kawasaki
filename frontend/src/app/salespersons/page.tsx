@@ -6,8 +6,10 @@ import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import SalespersonForm from '@/components/forms/SalespersonForm';
 import { Salesperson, Dealer } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SalespersonsPage() {
+  const { hasPermission } = useAuth();
   const [salespersons, setSalespersons] = useState<Salesperson[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,12 +72,14 @@ export default function SalespersonsPage() {
           <h1 className="text-2xl font-bold text-gray-800">Salesperson Management</h1>
           <p className="text-gray-600 text-sm">Manage Kawasaki sales team</p>
         </div>
+        {hasPermission('create-salespersons') && (
         <button
           onClick={() => { setEditingSalesperson(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Salesperson
         </button>
+        )}
       </div>
       <div className="flex gap-4 mb-4">
         <input
@@ -125,8 +129,12 @@ export default function SalespersonsPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/salespersons/" + sp.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    {hasPermission('edit-salespersons') && (
                     <button onClick={() => { setEditingSalesperson(sp); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    )}
+                    {hasPermission('delete-salespersons') && (
                     <button onClick={() => handleDelete(sp.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                    )}
                   </td>
                 </tr>
               ))}

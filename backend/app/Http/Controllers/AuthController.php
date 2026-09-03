@@ -63,7 +63,7 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Login successful',
             'data' => [
-                'user' => $this->formatUser($user),
+                'user' => $this->formatUser($user, true),
                 'token' => $token,
             ],
         ]);

@@ -91,6 +91,18 @@ class DealerController extends Controller
 
     public function destroy(Dealer $dealer): JsonResponse
     {
+        $hasChildren = $dealer->salespersons()->exists()
+            || $dealer->customers()->exists()
+            || $dealer->leads()->exists()
+            || $dealer->vehicles()->exists()
+            || $dealer->salesTransactions()->exists()
+            || $dealer->serviceRecords()->exists()
+            || $dealer->serviceBookings()->exists();
+
+        if ($hasChildren) {
+            return $this->error('Cannot delete dealer with existing related records', 422);
+        }
+
         $dealer->delete();
 
         return $this->success(null, 'Dealer deleted successfully');

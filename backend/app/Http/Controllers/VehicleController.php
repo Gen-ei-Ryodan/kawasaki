@@ -104,6 +104,23 @@ class VehicleController extends Controller
 
     public function destroy(Vehicle $vehicle): JsonResponse
     {
+        // Delete service items through service records
+        $vehicle->serviceRecords()->each(function ($record) {
+            $record->items()->delete();
+            $record->warrantyClaims()->delete();
+        });
+        $vehicle->warrantyClaims()->delete();
+        $vehicle->serviceWorkOrders()->delete();
+        $vehicle->serviceRecords()->delete();
+        $vehicle->serviceBookings()->delete();
+        $vehicle->serviceSchedules()->delete();
+        $vehicle->documents()->delete();
+        $vehicle->registrations()->delete();
+        $vehicle->timelines()->delete();
+        $vehicle->ownershipTransfers()->delete();
+        $vehicle->ownerships()->delete();
+        $vehicle->warranties()->delete();
+        $vehicle->salesTransactions()->update(['vehicle_id' => null]);
         $vehicle->delete();
 
         return $this->success(null, 'Vehicle deleted successfully');

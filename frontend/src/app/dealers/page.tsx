@@ -6,8 +6,10 @@ import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import DealerForm from '@/components/forms/DealerForm';
 import { Dealer } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function DealersPage() {
+  const { hasPermission } = useAuth();
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
   const [panelOpen, setPanelOpen] = useState(false);
@@ -60,12 +62,14 @@ export default function DealersPage() {
           <h1 className="text-2xl font-bold text-gray-800">Dealer Management</h1>
           <p className="text-gray-600 text-sm">Manage all Kawasaki dealers and branches</p>
         </div>
+        {hasPermission('create-dealers') && (
         <button
           onClick={() => { setEditingDealer(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Dealer
         </button>
+        )}
       </div>
 
       <div className="mb-4">
@@ -108,18 +112,22 @@ export default function DealersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
+                    {hasPermission('edit-dealers') && (
                     <button
                       onClick={() => { setEditingDealer(dealer); setPanelOpen(true); }}
                       className="text-blue-600 hover:text-blue-900"
                     >
                       Edit
                     </button>
+                    )}
+                    {hasPermission('delete-dealers') && (
                     <button
                       onClick={() => handleDelete(dealer.id)}
                       className="text-red-600 hover:text-red-900"
                     >
                       Delete
                     </button>
+                    )}
                   </td>
                 </tr>
               ))}

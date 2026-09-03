@@ -6,8 +6,10 @@ import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import SalesTargetForm from '@/components/forms/SalesTargetForm';
 import { SalesTarget, Salesperson, Dealer } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SalesTargetsPage() {
+  const { hasPermission } = useAuth();
   const [targets, setTargets] = useState<SalesTarget[]>([]);
   const [salespersons, setSalespersons] = useState<Salesperson[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
@@ -68,12 +70,14 @@ export default function SalesTargetsPage() {
           <h1 className="text-2xl font-bold text-gray-800">Sales Targets</h1>
           <p className="text-gray-600 text-sm">Manage sales targets and achievements</p>
         </div>
+        {hasPermission('create-sales-targets') && (
         <button
           onClick={() => { setEditingTarget(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + New Target
         </button>
+        )}
       </div>
       {loading ? (
         <div className="text-center py-10">Loading...</div>
@@ -105,8 +109,12 @@ export default function SalesTargetsPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
+                    {hasPermission('edit-sales-targets') && (
                     <button onClick={() => { setEditingTarget(t); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    )}
+                    {hasPermission('delete-sales-targets') && (
                     <button onClick={() => handleDelete(t.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                    )}
                   </td>
                 </tr>
               ))}

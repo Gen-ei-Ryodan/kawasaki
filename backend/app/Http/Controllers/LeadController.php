@@ -108,6 +108,10 @@ class LeadController extends Controller
 
     public function destroy(Lead $lead): JsonResponse
     {
+        $lead->statusHistories()->delete();
+        $lead->followUps()->delete();
+        $lead->salesActivities()->delete();
+        $lead->salesTransactions()->delete();
         $lead->delete();
 
         return $this->success(null, 'Lead deleted successfully');

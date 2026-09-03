@@ -83,6 +83,7 @@ class WarrantyController extends Controller
 
     public function destroy(Warranty $warranty): JsonResponse
     {
+        $warranty->claims()->delete();
         $warranty->delete();
 
         return $this->success(null, 'Warranty deleted successfully');

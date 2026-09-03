@@ -113,6 +113,15 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer): JsonResponse
     {
+        // Delete related records first (order matters due to foreign keys)
+        $customer->loyaltyTransactions()->delete();
+        $customer->loyaltyAccount()?->delete();
+        $customer->followUps()->delete();
+        $customer->salesActivities()->delete();
+        $customer->rewardRedemptions()->delete();
+        $customer->vouchers()->delete();
+        $customer->serviceBookings()->delete();
+
         $customer->delete();
 
         return $this->success(null, 'Customer deleted successfully');

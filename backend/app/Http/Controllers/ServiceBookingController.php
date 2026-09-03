@@ -88,6 +88,7 @@ class ServiceBookingController extends Controller
 
     public function destroy(ServiceBooking $booking): JsonResponse
     {
+        $booking->workOrders()->delete();
         $booking->delete();
 
         return $this->success(null, 'Service booking deleted successfully');

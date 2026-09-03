@@ -75,6 +75,10 @@ class VehicleModelController extends Controller
 
     public function destroy(VehicleModel $vm): JsonResponse
     {
+        if ($vm->vehicles()->exists()) {
+            return $this->error('Cannot delete vehicle model with existing vehicles', 422);
+        }
+
         $vm->delete();
 
         return $this->success(null, 'Vehicle model deleted successfully');

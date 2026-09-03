@@ -91,6 +91,17 @@ class SalespersonController extends Controller
 
     public function destroy(Salesperson $salesperson): JsonResponse
     {
+        $hasChildren = $salesperson->leads()->exists()
+            || $salesperson->salesTransactions()->exists()
+            || $salesperson->salesTargets()->exists()
+            || $salesperson->vehicleOwnerships()->exists();
+
+        if ($hasChildren) {
+            return $this->error('Cannot delete salesperson with existing related records', 422);
+        }
+
+        $salesperson->followUps()->delete();
+        $salesperson->salesActivities()->delete();
         $salesperson->delete();
 
         return $this->success(null, 'Salesperson deleted successfully');

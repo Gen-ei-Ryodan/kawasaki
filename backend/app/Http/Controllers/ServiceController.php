@@ -135,6 +135,8 @@ class ServiceController extends Controller
 
     public function destroy(ServiceRecord $service): JsonResponse
     {
+        $service->items()->delete();
+        $service->warrantyClaims()->delete();
         $service->delete();
 
         return $this->success(null, 'Service record deleted successfully');

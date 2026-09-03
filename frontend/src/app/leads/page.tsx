@@ -6,8 +6,10 @@ import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import LeadForm from '@/components/forms/LeadForm';
 import { Lead, Dealer, Salesperson, VehicleModel } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LeadsPage() {
+  const { hasPermission } = useAuth();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [salespersons, setSalespersons] = useState<Salesperson[]>([]);
@@ -91,12 +93,14 @@ export default function LeadsPage() {
           <h1 className="text-2xl font-bold text-gray-800">Lead Management</h1>
           <p className="text-gray-600 text-sm">Manage sales leads and pipeline</p>
         </div>
+        {hasPermission('create-leads') && (
         <button
           onClick={() => { setEditingLead(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Lead
         </button>
+        )}
       </div>
       <div className="flex gap-4 mb-4">
         <input
@@ -162,8 +166,12 @@ export default function LeadsPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/leads/" + lead.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    {hasPermission('edit-leads') && (
                     <button onClick={() => { setEditingLead(lead); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    )}
+                    {hasPermission('delete-leads') && (
                     <button onClick={() => handleDelete(lead.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                    )}
                   </td>
                 </tr>
               ))}

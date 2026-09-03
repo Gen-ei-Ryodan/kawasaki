@@ -6,8 +6,10 @@ import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import VehicleForm from '@/components/forms/VehicleForm';
 import { Vehicle, VehicleModel, Dealer } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function VehiclesPage() {
+  const { hasPermission } = useAuth();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [models, setModels] = useState<VehicleModel[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
@@ -80,12 +82,14 @@ export default function VehiclesPage() {
           <h1 className="text-2xl font-bold text-gray-800">Vehicle Inventory</h1>
           <p className="text-gray-600 text-sm">Manage vehicle units and inventory</p>
         </div>
+        {hasPermission('create-vehicles') && (
         <button
           onClick={() => { setEditingVehicle(null); setPanelOpen(true); }}
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
         >
           + Add Vehicle
         </button>
+        )}
       </div>
       <div className="flex gap-4 mb-4">
         <input
@@ -137,8 +141,12 @@ export default function VehiclesPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
                     <button onClick={() => { window.location.href = "/vehicles/" + v.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    {hasPermission('edit-vehicles') && (
                     <button onClick={() => { setEditingVehicle(v); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
+                    )}
+                    {hasPermission('delete-vehicles') && (
                     <button onClick={() => handleDelete(v.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                    )}
                   </td>
                 </tr>
               ))}

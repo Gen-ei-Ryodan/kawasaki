@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -27,14 +29,15 @@ interface MenuItem {
   name: string;
   href: string;
   icon: LucideIcon;
+  roles?: string[];
 }
 
 const menuItems: MenuItem[] = [
   { name: 'Dashboard',         href: '/dashboard',         icon: LayoutDashboard },
-  { name: 'Dealers',           href: '/dealers',           icon: Building2 },
-  { name: 'Salespersons',      href: '/salespersons',      icon: UserCircle },
+  { name: 'Dealers',           href: '/dealers',           icon: Building2,        roles: ['admin', 'manager'] },
+  { name: 'Salespersons',      href: '/salespersons',      icon: UserCircle,       roles: ['admin', 'manager'] },
   { name: 'Customers',         href: '/customers',         icon: Users },
-  { name: 'Vehicle Models',    href: '/vehicle-models',    icon: Bike },
+  { name: 'Vehicle Models',    href: '/vehicle-models',    icon: Bike,             roles: ['admin', 'manager'] },
   { name: 'Leads',             href: '/leads',             icon: Target },
   { name: 'Sales Pipeline',    href: '/leads/pipeline',    icon: TrendingUp },
   { name: 'Follow Ups',        href: '/follow-ups',        icon: CalendarClock },
@@ -42,14 +45,37 @@ const menuItems: MenuItem[] = [
   { name: 'Sales',             href: '/sales',             icon: DollarSign },
   { name: 'Services',          href: '/services',          icon: Hammer },
   { name: 'Warranties',        href: '/warranties',        icon: ShieldCheck },
-  { name: 'Loyalty',           href: '/loyalty',           icon: Star },
-  { name: 'Sales Targets',     href: '/sales-targets',     icon: Trophy },
-  { name: 'Reports',           href: '/reports',           icon: BarChart3 },
+  { name: 'Loyalty',           href: '/loyalty',           icon: Star,             roles: ['admin', 'manager'] },
+  { name: 'Sales Targets',     href: '/sales-targets',     icon: Trophy,           roles: ['admin', 'manager'] },
+  { name: 'Reports',           href: '/reports',           icon: BarChart3,        roles: ['admin', 'manager'] },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
+  const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
+  const userRoles = user.roles || [];
+  const filteredMenu = menuItems.filter(item => {
+    if (!item.roles) return true;
+    return item.roles.some(role => userRoles.includes(role));
+  });
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -59,7 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <p className="text-xs text-gray-300 mt-0.5">Dealer Management</p>
         </div>
         <nav className="flex-1 overflow-y-auto py-2">
-          {menuItems.map((item) => {
+          {filteredMenu.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
             return (
@@ -80,8 +106,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </nav>
         <div className="p-4 border-t border-gray-800">
           <div className="text-sm text-gray-200 mb-3">
-            <p className="font-semibold text-white">{user?.name}</p>
-            <p className="text-xs text-gray-400">{user?.email}</p>
+            <p className="font-semibold text-white">{user.name}</p>
+            <p className="text-xs text-gray-400">{user.email}</p>
+            {userRoles.length > 0 && (
+              <p className="text-xs text-red-400 mt-1">{userRoles.join(', ')}</p>
+            )}
           </div>
           <button
             onClick={logout}
@@ -103,4 +132,3 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-

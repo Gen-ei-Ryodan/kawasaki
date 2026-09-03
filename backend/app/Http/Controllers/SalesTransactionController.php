@@ -118,6 +118,7 @@ class SalesTransactionController extends Controller
 
     public function destroy(SalesTransaction $sale): JsonResponse
     {
+        $sale->ownerships()->delete();
         $sale->delete();
 
         return $this->success(null, 'Sales transaction deleted successfully');
