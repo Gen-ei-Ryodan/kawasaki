@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import CustomerForm from '@/components/forms/CustomerForm';
@@ -9,10 +11,12 @@ import { Customer } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function CustomersPage() {
+  const router = useRouter();
   const { hasPermission } = useAuth();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [saving, setSaving] = useState(false);
@@ -20,7 +24,7 @@ export default function CustomersPage() {
   const loadCustomers = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       const response = await api.get('/customers', { params });
       setCustomers(response.data.data.data || []);
     } catch (err) {
@@ -30,7 +34,7 @@ export default function CustomersPage() {
     }
   };
 
-  useEffect(() => { loadCustomers(); }, [search]);
+  useEffect(() => { loadCustomers(); }, [debouncedSearch]);
 
   const handleSave = async (data: Partial<Customer>) => {
     setSaving(true);
@@ -53,7 +57,7 @@ export default function CustomersPage() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this customer?')) return;
-    try { await api.delete('/customers/' + id); loadCustomers(); } catch (err) { console.error(err); }
+    try { await api.delete('/customers/' + id); loadCustomers(); } catch (err: any) { alert(err.response?.data?.message || 'Failed to delete customer'); }
   };
 
   const closePanel = () => { setPanelOpen(false); setEditingCustomer(null); };
@@ -113,7 +117,7 @@ export default function CustomersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = '/customers/' + c.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    <button onClick={() => router.push('/customers/' + c.id)} className="text-blue-600 hover:text-blue-900">View</button>
                     {hasPermission('edit-customers') && (
                     <button onClick={() => { setEditingCustomer(c); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     )}

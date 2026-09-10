@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Customer } from '@/types';
 
 export default function CustomerFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [formData, setFormData] = useState({
     customer_code: '', full_name: '', nik: '', phone: '', email: '',
@@ -19,7 +21,6 @@ export default function CustomerFormPage({ isEdit = false }: { isEdit?: boolean 
 
   useEffect(() => {
     if (isEdit) {
-      const id = window.location.pathname.split('/').pop();
       api.get(`/customers/${id}`).then(res => {
         const c = res.data.data;
         setCustomer(c);

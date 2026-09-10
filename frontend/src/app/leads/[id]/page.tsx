@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Lead } from '@/types';
 
 export default function LeadDetailPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [lead, setLead] = useState<Lead | any>(null);
   const [loading, setLoading] = useState(true);
-  const id = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     async function load() {
@@ -34,7 +37,7 @@ export default function LeadDetailPage() {
           <p className="text-gray-600 text-sm">{lead?.lead_code} - {lead?.name}</p>
         </div>
         <button
-          onClick={() => { window.location.href = "/leads/" + id + "/edit"; }}
+          onClick={() => router.push("/leads/" + id + "/edit")}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
         >
           Edit

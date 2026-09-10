@@ -1,18 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import WarrantyForm from '@/components/forms/WarrantyForm';
 import { Warranty, Vehicle, Customer } from '@/types';
 
 export default function WarrantiesPage() {
+  const router = useRouter();
   const [warranties, setWarranties] = useState<Warranty[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingWarranty, setEditingWarranty] = useState<Warranty | null>(null);
@@ -21,7 +25,7 @@ export default function WarrantiesPage() {
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (statusFilter) params.status = statusFilter;
       const [wRes, vRes, cRes] = await Promise.all([
         api.get('/warranties', { params }),
@@ -38,7 +42,7 @@ export default function WarrantiesPage() {
     }
   };
 
-  useEffect(() => { loadData(); }, [search, statusFilter]);
+  useEffect(() => { loadData(); }, [debouncedSearch, statusFilter]);
 
   const handleSave = async (data: Partial<Warranty>) => {
     setSaving(true);
@@ -128,7 +132,7 @@ export default function WarrantiesPage() {
                     <span className={`px-2 py-1 rounded-full text-xs ${statusColors[w.status]}`}>{w.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = "/warranties/" + w.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    <button onClick={() => router.push("/warranties/" + w.id)} className="text-blue-600 hover:text-blue-900">View</button>
                     <button onClick={() => { setEditingWarranty(w); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                   </td>
                 </tr>

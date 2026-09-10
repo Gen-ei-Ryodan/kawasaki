@@ -147,6 +147,15 @@ export default function ServiceForm({ service, onSave, onClose, saving, vehicles
         />
       </div>
       <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+        <textarea
+          value={formData.notes}
+          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900 placeholder-gray-400"
+          rows={2}
+        />
+      </div>
+      <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
         <select
           value={formData.status}

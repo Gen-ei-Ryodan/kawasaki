@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import LeadForm from '@/components/forms/LeadForm';
@@ -9,6 +11,7 @@ import { Lead, Dealer, Salesperson, VehicleModel } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function LeadsPage() {
+  const router = useRouter();
   const { hasPermission } = useAuth();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
@@ -16,6 +19,7 @@ export default function LeadsPage() {
   const [models, setModels] = useState<VehicleModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
@@ -24,7 +28,7 @@ export default function LeadsPage() {
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (statusFilter) params.status = statusFilter;
       const [leadsRes, dRes, sRes, mRes] = await Promise.all([
         api.get('/leads', { params }),
@@ -43,7 +47,7 @@ export default function LeadsPage() {
     }
   };
 
-  useEffect(() => { loadData(); }, [search, statusFilter]);
+  useEffect(() => { loadData(); }, [debouncedSearch, statusFilter]);
 
   const handleSave = async (data: Partial<Lead>) => {
     setSaving(true);
@@ -66,7 +70,7 @@ export default function LeadsPage() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this lead?')) return;
-    try { await api.delete(`/leads/${id}`); loadData(); } catch (err) { console.error(err); }
+    try { await api.delete(`/leads/${id}`); loadData(); } catch (err: any) { alert(err.response?.data?.message || 'Failed to delete lead'); }
   };
 
   const handleStatusChange = async (lead: Lead, newStatus: string) => {
@@ -165,7 +169,7 @@ export default function LeadsPage() {
                     </select>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = "/leads/" + lead.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    <button onClick={() => router.push("/leads/" + lead.id)} className="text-blue-600 hover:text-blue-900">View</button>
                     {hasPermission('edit-leads') && (
                     <button onClick={() => { setEditingLead(lead); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     )}

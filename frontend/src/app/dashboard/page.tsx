@@ -74,7 +74,7 @@ export default function DashboardPage() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t text-center">
-                <span className="text-lg font-semibold">Conversion Rate: </span>
+                <span className="text-lg font-semibold text-gray-900">Conversion Rate: </span>
                 <span className="text-xl font-bold text-red-600">{funnel.conversion_rate || 0}%</span>
               </div>
             </div>

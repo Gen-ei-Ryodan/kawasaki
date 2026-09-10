@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import WarrantyClaimForm from '@/components/forms/WarrantyClaimForm';
@@ -14,6 +15,7 @@ export default function WarrantyClaimsPage() {
   const [warranties, setWarranties] = useState<Warranty[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingClaim, setEditingClaim] = useState<WarrantyClaim | null>(null);
@@ -22,7 +24,7 @@ export default function WarrantyClaimsPage() {
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (statusFilter) params.status = statusFilter;
       const [clRes, vRes, cRes, wRes] = await Promise.all([
         api.get('/warranty-claims', { params }),
@@ -41,7 +43,7 @@ export default function WarrantyClaimsPage() {
     }
   };
 
-  useEffect(() => { loadData(); }, [search, statusFilter]);
+  useEffect(() => { loadData(); }, [debouncedSearch, statusFilter]);
 
   const handleSave = async (data: Partial<WarrantyClaim>) => {
     setSaving(true);

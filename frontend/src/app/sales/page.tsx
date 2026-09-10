@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import SalesForm from '@/components/forms/SalesForm';
 import { SalesTransaction, Customer, Vehicle, Salesperson, Dealer } from '@/types';
 
 export default function SalesPage() {
+  const router = useRouter();
   const [sales, setSales] = useState<SalesTransaction[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -15,6 +18,7 @@ export default function SalesPage() {
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -22,7 +26,7 @@ export default function SalesPage() {
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (statusFilter) params.status = statusFilter;
       const [sRes, cRes, vRes, spRes, dRes] = await Promise.all([
         api.get('/sales', { params }),
@@ -43,7 +47,7 @@ export default function SalesPage() {
     }
   };
 
-  useEffect(() => { loadData(); }, [search, statusFilter]);
+  useEffect(() => { loadData(); }, [debouncedSearch, statusFilter]);
 
   const handleSave = async (data: Partial<SalesTransaction>) => {
     setSaving(true);
@@ -64,7 +68,7 @@ export default function SalesPage() {
 
   const handleComplete = async (id: number) => {
     if (!confirm('Complete this sale?')) return;
-    try { await api.put(`/sales/${id}/complete`, {}); loadData(); } catch (err: any) { alert(err.response?.data?.message); }
+    try { await api.put(`/sales/${id}/complete`, {}); loadData(); } catch (err: any) { alert(err.response?.data?.message || 'Failed to complete sale'); }
   };
 
   const closePanel = () => { setPanelOpen(false); };
@@ -147,7 +151,7 @@ export default function SalesPage() {
                     {s.status !== 'SOLD' && s.status !== 'CANCELLED' && (
                       <button onClick={() => handleComplete(s.id)} className="text-green-600 hover:text-green-900">Complete</button>
                     )}
-                    <button onClick={() => { window.location.href = "/sales/" + s.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    <button onClick={() => router.push("/sales/" + s.id)} className="text-blue-600 hover:text-blue-900">View</button>
                   </td>
                 </tr>
               ))}

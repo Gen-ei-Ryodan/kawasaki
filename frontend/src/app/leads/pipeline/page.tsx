@@ -60,7 +60,19 @@ export default function PipelinePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {columns.map(col => (
-              <div key={col.key} className="rounded-lg p-3" style={{ backgroundColor: col.color }}>
+              <div
+                key={col.key}
+                className="rounded-lg p-3 min-h-[200px]"
+                style={{ backgroundColor: col.color }}
+                onDragOver={(e) => { e.preventDefault(); e.currentTarget.style.opacity = '0.7'; }}
+                onDragLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.style.opacity = '1';
+                  const leadId = Number(e.dataTransfer.getData('leadId'));
+                  if (leadId) handleDrop(leadId, col.key);
+                }}
+              >
                 <h3 className="font-semibold text-sm mb-3 text-white">{col.label}</h3>
                 <div className="space-y-2">
                   {(pipeline?.[col.key] || []).map((lead: Lead) => (

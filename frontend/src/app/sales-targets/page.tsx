@@ -58,7 +58,7 @@ export default function SalesTargetsPage() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this target?')) return;
-    try { await api.delete(`/sales-targets/${id}`); loadData(); } catch (err) { console.error(err); }
+    try { await api.delete(`/sales-targets/${id}`); loadData(); } catch (err: any) { alert(err.response?.data?.message || 'Failed to delete target'); }
   };
 
   const closePanel = () => { setPanelOpen(false); setEditingTarget(null); };
@@ -102,7 +102,7 @@ export default function SalesTargetsPage() {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">{t.period}</td>
                   <td className="px-6 py-4 text-sm text-gray-500">{t.target_units}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">Rp{t.target_revenue.toLocaleString('id-ID')}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Rp{(t.target_revenue || 0).toLocaleString('id-ID')}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-full text-xs ${t.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                       {t.status}

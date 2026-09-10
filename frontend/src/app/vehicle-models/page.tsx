@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import VehicleModelForm from '@/components/forms/VehicleModelForm';
@@ -13,6 +14,7 @@ export default function VehicleModelsPage() {
   const [models, setModels] = useState<VehicleModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingModel, setEditingModel] = useState<VehicleModel | null>(null);
   const [saving, setSaving] = useState(false);
@@ -20,7 +22,7 @@ export default function VehicleModelsPage() {
   const loadModels = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       const response = await api.get('/vehicle-models', { params });
       setModels(response.data.data.data || []);
     } catch (err) {
@@ -30,7 +32,7 @@ export default function VehicleModelsPage() {
     }
   };
 
-  useEffect(() => { loadModels(); }, [search]);
+  useEffect(() => { loadModels(); }, [debouncedSearch]);
 
   const handleSave = async (data: Partial<VehicleModel>) => {
     setSaving(true);
@@ -53,7 +55,7 @@ export default function VehicleModelsPage() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this vehicle model?')) return;
-    try { await api.delete(`/vehicle-models/${id}`); loadModels(); } catch (err) { console.error(err); }
+    try { await api.delete(`/vehicle-models/${id}`); loadModels(); } catch (err: any) { alert(err.response?.data?.message || 'Failed to delete model'); }
   };
 
   const closePanel = () => { setPanelOpen(false); setEditingModel(null); };

@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 
 export default function VehicleDetailPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [vehicle, setVehicle] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const id = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     async function load() {
@@ -33,7 +36,7 @@ export default function VehicleDetailPage() {
           <p className="text-gray-600 text-sm">{vehicle?.vehicle_code} - {vehicle?.vin}</p>
         </div>
         <button
-          onClick={() => { window.location.href = "/vehicles/" + id + "/edit"; }}
+          onClick={() => router.push("/vehicles/" + id + "/edit")}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
         >
           Edit

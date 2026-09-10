@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Dealer, Salesperson } from '@/types';
 
 export default function SalespersonFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [sp, setSp] = useState<Salesperson | null>(null);
   const [formData, setFormData] = useState({
@@ -21,7 +23,6 @@ export default function SalespersonFormPage({ isEdit = false }: { isEdit?: boole
       const dRes = await api.get('/dealers', { params: { per_page: 100 } });
       setDealers(dRes.data.data.data || []);
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         const res = await api.get(`/salespersons/${id}`);
         const s = res.data.data;
         setSp(s);

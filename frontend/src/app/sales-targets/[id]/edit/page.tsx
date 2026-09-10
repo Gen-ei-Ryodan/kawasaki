@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Salesperson, Dealer } from '@/types';
 
 export default function SalesTargetFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [salespersons, setSalespersons] = useState<Salesperson[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [formData, setFormData] = useState({
@@ -26,7 +28,6 @@ export default function SalesTargetFormPage({ isEdit = false }: { isEdit?: boole
       setSalespersons(sRes.data.data.data || []);
       setDealers(dRes.data.data.data || []);
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         const res = await api.get(`/sales-targets/${id}`);
         const t = res.data.data;
         setFormData({
@@ -52,7 +53,6 @@ export default function SalesTargetFormPage({ isEdit = false }: { isEdit?: boole
         target_revenue: Number(formData.target_revenue),
       };
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         await api.put(`/sales-targets/${id}`, data);
       } else {
         await api.post('/sales-targets', data);

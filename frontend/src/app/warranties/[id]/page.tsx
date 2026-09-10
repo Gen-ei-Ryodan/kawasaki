@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Warranty } from '@/types';
 
 export default function WarrantyDetailPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [warranty, setWarranty] = useState<Warranty | any>(null);
   const [loading, setLoading] = useState(true);
-  const id = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     async function load() {
@@ -34,7 +37,7 @@ export default function WarrantyDetailPage() {
           <p className="text-gray-600 text-sm">{warranty?.warranty_number}</p>
         </div>
         <button
-          onClick={() => { window.location.href = "/warranties/" + id + "/edit"; }}
+          onClick={() => router.push("/warranties/" + id + "/edit")}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
         >
           Edit

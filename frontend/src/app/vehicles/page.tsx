@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import VehicleForm from '@/components/forms/VehicleForm';
@@ -9,12 +11,14 @@ import { Vehicle, VehicleModel, Dealer } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function VehiclesPage() {
+  const router = useRouter();
   const { hasPermission } = useAuth();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [models, setModels] = useState<VehicleModel[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
@@ -23,7 +27,7 @@ export default function VehiclesPage() {
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (statusFilter) params.status = statusFilter;
       const [vRes, mRes, dRes] = await Promise.all([
         api.get('/vehicles', { params }),
@@ -40,7 +44,7 @@ export default function VehiclesPage() {
     }
   };
 
-  useEffect(() => { loadData(); }, [search, statusFilter]);
+  useEffect(() => { loadData(); }, [debouncedSearch, statusFilter]);
 
   const handleSave = async (data: Partial<Vehicle>) => {
     setSaving(true);
@@ -63,7 +67,7 @@ export default function VehiclesPage() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this vehicle?')) return;
-    try { await api.delete(`/vehicles/${id}`); loadData(); } catch (err) { console.error(err); }
+    try { await api.delete(`/vehicles/${id}`); loadData(); } catch (err: any) { alert(err.response?.data?.message || 'Failed to delete vehicle'); }
   };
 
   const closePanel = () => { setPanelOpen(false); setEditingVehicle(null); };
@@ -140,7 +144,7 @@ export default function VehiclesPage() {
                     <span className={`px-2 py-1 rounded-full text-xs ${statusColors[v.status]}`}>{v.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = "/vehicles/" + v.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    <button onClick={() => router.push("/vehicles/" + v.id)} className="text-blue-600 hover:text-blue-900">View</button>
                     {hasPermission('edit-vehicles') && (
                     <button onClick={() => { setEditingVehicle(v); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                     )}

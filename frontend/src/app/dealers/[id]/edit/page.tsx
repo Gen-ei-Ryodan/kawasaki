@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Dealer } from '@/types';
 
 export default function DealerFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [dealer, setDealer] = useState<Dealer | null>(null);
   const [formData, setFormData] = useState({
     dealer_code: '', name: '', phone: '', email: '', address: '', city: '', province: '', status: 'ACTIVE',
@@ -17,7 +19,6 @@ export default function DealerFormPage({ isEdit = false }: { isEdit?: boolean })
 
   useEffect(() => {
     if (isEdit) {
-      const id = window.location.pathname.split('/').pop();
       api.get(`/dealers/${id}`).then(res => {
         const d = res.data.data;
         setDealer(d);

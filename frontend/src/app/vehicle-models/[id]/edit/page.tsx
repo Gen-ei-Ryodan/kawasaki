@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { VehicleModel } from '@/types';
 
 export default function VehicleModelFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [model, setModel] = useState<VehicleModel | null>(null);
   const [formData, setFormData] = useState({
     brand: 'Kawasaki', model: '', variant: '', year: '', engine_cc: '', description: '', status: 'ACTIVE',
@@ -17,7 +19,6 @@ export default function VehicleModelFormPage({ isEdit = false }: { isEdit?: bool
 
   useEffect(() => {
     if (isEdit) {
-      const id = window.location.pathname.split('/').pop();
       api.get(`/vehicle-models/${id}`).then(res => {
         const m = res.data.data;
         setModel(m);

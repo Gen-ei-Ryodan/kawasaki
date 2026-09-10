@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { SalesTransaction } from '@/types';
 
 export default function SaleDetailPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [sale, setSale] = useState<SalesTransaction | any>(null);
   const [loading, setLoading] = useState(true);
-  const id = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     async function load() {
@@ -35,7 +38,7 @@ export default function SaleDetailPage() {
         </div>
         {sale?.status !== 'SOLD' && sale?.status !== 'CANCELLED' && (
           <button
-            onClick={async () => { await api.put(`/sales/${id}/complete`, {}); window.location.reload(); }}
+            onClick={async () => { await api.put(`/sales/${id}/complete`, {}); router.refresh(); }}
             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
           >
             Complete Sale

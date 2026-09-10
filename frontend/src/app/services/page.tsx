@@ -1,19 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import ServiceForm from '@/components/forms/ServiceForm';
 import { ServiceRecord, Vehicle, Customer, Dealer } from '@/types';
 
 export default function ServicesPage() {
+  const router = useRouter();
   const [services, setServices] = useState<ServiceRecord[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
   const [statusFilter, setStatusFilter] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingService, setEditingService] = useState<ServiceRecord | null>(null);
@@ -22,7 +26,7 @@ export default function ServicesPage() {
   const loadData = async () => {
     try {
       const params: any = { per_page: 50 };
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (statusFilter) params.status = statusFilter;
       const [sRes, vRes, cRes, dRes] = await Promise.all([
         api.get('/services', { params }),
@@ -41,7 +45,7 @@ export default function ServicesPage() {
     }
   };
 
-  useEffect(() => { loadData(); }, [search, statusFilter]);
+  useEffect(() => { loadData(); }, [debouncedSearch, statusFilter]);
 
   const handleSave = async (data: Partial<ServiceRecord>) => {
     setSaving(true);
@@ -135,7 +139,7 @@ export default function ServicesPage() {
                     <span className={`px-2 py-1 rounded-full text-xs ${statusColors[s.status]}`}>{s.status}</span>
                   </td>
                   <td className="px-6 py-4 text-right text-sm space-x-2">
-                    <button onClick={() => { window.location.href = "/services/" + s.id; }} className="text-blue-600 hover:text-blue-900">View</button>
+                    <button onClick={() => router.push("/services/" + s.id)} className="text-blue-600 hover:text-blue-900">View</button>
                     <button onClick={() => { setEditingService(s); setPanelOpen(true); }} className="text-yellow-600 hover:text-yellow-900">Edit</button>
                   </td>
                 </tr>

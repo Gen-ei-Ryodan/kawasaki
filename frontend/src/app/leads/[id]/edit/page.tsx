@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Dealer, Salesperson, VehicleModel } from '@/types';
 
 export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [salespersons, setSalespersons] = useState<Salesperson[]>([]);
   const [models, setModels] = useState<VehicleModel[]>([]);
@@ -29,7 +31,6 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
       setSalespersons(sRes.data.data.data || []);
       setModels(mRes.data.data.data || []);
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         const res = await api.get(`/leads/${id}`);
         const l = res.data.data;
         setFormData({
@@ -58,7 +59,6 @@ export default function LeadFormPage({ isEdit = false }: { isEdit?: boolean }) {
         estimated_budget: formData.estimated_budget ? Number(formData.estimated_budget) : null,
       };
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         await api.put(`/leads/${id}`, data);
       } else {
         await api.post('/leads', data);

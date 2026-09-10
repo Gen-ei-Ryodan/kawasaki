@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Customer, Vehicle, SalesTransaction } from '@/types';
 
 export default function CustomerDetailPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [customer, setCustomer] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const id = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     async function load() {
@@ -34,7 +37,7 @@ export default function CustomerDetailPage() {
           <p className="text-gray-600 text-sm">{customer?.full_name} - {customer?.customer_code}</p>
         </div>
         <button
-          onClick={() => { window.location.href = "/customers/" + id + "/edit"; }}
+          onClick={() => router.push("/customers/" + id + "/edit")}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
         >
           Edit

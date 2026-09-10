@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { ServiceRecord } from '@/types';
 
 export default function ServiceDetailPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [service, setService] = useState<ServiceRecord | any>(null);
   const [loading, setLoading] = useState(true);
-  const id = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     async function load() {
@@ -34,7 +37,7 @@ export default function ServiceDetailPage() {
           <p className="text-gray-600 text-sm">{service?.service_number}</p>
         </div>
         <button
-          onClick={() => { window.location.href = "/services/" + id + "/edit"; }}
+          onClick={() => router.push("/services/" + id + "/edit")}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
         >
           Edit

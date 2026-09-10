@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
+import { useDebounce } from '@/hooks/useDebounce';
 import Layout from '@/components/Layout';
 import SlidePanel from '@/components/SlidePanel';
 import DealerForm from '@/components/forms/DealerForm';
@@ -15,10 +16,11 @@ export default function DealersPage() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [editingDealer, setEditingDealer] = useState<Dealer | null>(null);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
 
   const loadDealers = async () => {
     try {
-      const response = await api.get('/dealers', { params: { search, per_page: 50 } });
+      const response = await api.get('/dealers', { params: { search: debouncedSearch, per_page: 50 } });
       setDealers(response.data.data.data || []);
     } catch (err) {
       console.error('Failed to load dealers:', err);
@@ -27,7 +29,7 @@ export default function DealersPage() {
     }
   };
 
-  useEffect(() => { loadDealers(); }, [search]);
+  useEffect(() => { loadDealers(); }, [debouncedSearch]);
 
   const handleSave = async (data: Partial<Dealer>) => {
     try {
@@ -50,8 +52,8 @@ export default function DealersPage() {
     try {
       await api.delete(`/dealers/${id}`);
       loadDealers();
-    } catch (err) {
-      console.error('Failed to delete dealer:', err);
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to delete dealer');
     }
   };
 

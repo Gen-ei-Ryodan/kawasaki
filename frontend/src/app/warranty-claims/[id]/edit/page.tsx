@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Vehicle, Customer } from '@/types';
 
 export default function WarrantyClaimFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [warranties, setWarranties] = useState<any[]>([]);
@@ -29,7 +31,6 @@ export default function WarrantyClaimFormPage({ isEdit = false }: { isEdit?: boo
       setCustomers(cRes.data.data.data || []);
       setWarranties(wRes.data.data.data || []);
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         const res = await api.get('/warranty-claims/' + id);
         const c = res.data.data;
         setFormData({
@@ -57,7 +58,6 @@ export default function WarrantyClaimFormPage({ isEdit = false }: { isEdit?: boo
         cost: Number(formData.cost) || 0,
       };
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         await api.put('/warranty-claims/' + id, data);
       } else {
         await api.post('/warranty-claims', data);

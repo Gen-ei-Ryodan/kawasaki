@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { VehicleModel, Dealer } from '@/types';
 
 export default function VehicleFormPage({ isEdit = false }: { isEdit?: boolean }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [models, setModels] = useState<VehicleModel[]>([]);
   const [dealers, setDealers] = useState<Dealer[]>([]);
   const [formData, setFormData] = useState({
@@ -26,7 +28,6 @@ export default function VehicleFormPage({ isEdit = false }: { isEdit?: boolean }
       setModels(mRes.data.data.data || []);
       setDealers(dRes.data.data.data || []);
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         const res = await api.get(`/vehicles/${id}`);
         const v = res.data.data;
         setFormData({
@@ -52,7 +53,6 @@ export default function VehicleFormPage({ isEdit = false }: { isEdit?: boolean }
         dealer_id: formData.dealer_id ? Number(formData.dealer_id) : null,
       };
       if (isEdit) {
-        const id = window.location.pathname.split('/').pop();
         await api.put(`/vehicles/${id}`, data);
       } else {
         await api.post('/vehicles', data);

@@ -1,15 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Layout from '@/components/Layout';
 import { Salesperson } from '@/types';
 
 export default function SalespersonDetailPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [sp, setSp] = useState<Salesperson | any>(null);
   const [achievement, setAchievement] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const id = typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : '';
 
   useEffect(() => {
     async function load() {
@@ -39,7 +42,7 @@ export default function SalespersonDetailPage() {
           <p className="text-gray-600 text-sm">{sp?.employee_code} - {sp?.name}</p>
         </div>
         <button
-          onClick={() => { window.location.href = "/salespersons/" + id + "/edit"; }}
+          onClick={() => router.push("/salespersons/" + id + "/edit")}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
         >
           Edit
